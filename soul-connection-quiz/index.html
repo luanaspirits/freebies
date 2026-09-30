@@ -254,6 +254,22 @@
   .emailbox { background: rgba(227,194,127,.08); border: 1px solid var(--gold2); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
   .emailbox p { margin: 0; }
   .emailbox .btn { width: 100%; padding-block: 18px; font-size: 17.5px; flex-direction: column; gap: 2px; }
+  .sheet { position: fixed; inset: 0; z-index: 50; display: none; align-items: flex-end; justify-content: center; background: rgba(10,4,14,.72); backdrop-filter: blur(6px); padding: 16px; }
+  .sheet.open { display: flex; }
+  @media (min-width: 640px) { .sheet { align-items: center; } }
+  .sheet .panel { width: 100%; max-width: 480px; max-height: 92vh; overflow-y: auto; background: linear-gradient(170deg, #3d1f47, #1a0a20); border: 1px solid var(--gold2); border-radius: 22px; padding: 24px 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+  .sheet h3 { color: #fff; font-size: 24px; }
+  .sheet p { margin: 0; font-size: 15.5px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold2); }
+  .field .row { display: flex; gap: 8px; align-items: stretch; }
+  .field .val { flex: 1; min-width: 0; background: rgba(26,10,32,.7); border: 1px solid var(--line); border-radius: 12px; padding: 11px 13px; color: #fff; font: inherit; font-size: 15px; overflow-wrap: anywhere; }
+  .field textarea.val { min-height: 116px; resize: vertical; line-height: 1.5; }
+  .copy { flex: 0 0 auto; font: inherit; font-size: 14px; color: var(--plum); background: var(--gold2); border: 0; border-radius: 12px; padding: 0 14px; cursor: pointer; }
+  .copy.done { background: var(--lav); }
+  .sheet .apps { display: flex; flex-direction: column; gap: 10px; }
+  .sheet .apps .btn { width: 100%; padding-block: 14px; }
+  .sheet .x { align-self: center; background: none; border: 0; color: var(--soft); font: inherit; text-decoration: underline; cursor: pointer; }
   .final .inner { gap: 16px; }
   .final .cta-col { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 380px; }
   .final .cta-col .btn { width: 100%; padding-block: 17px; }
@@ -407,7 +423,7 @@
         <h2>I'd love to hear <em>where you're at.</em></h2>
         <p style="max-width:34ch">Send me your quiz result and what you're most wanting clarity on. I read and answer every message personally, and I'll let you know what I think would help you most.</p>
         <div class="cta-col">
-          <a class="btn" href="mailto:luana@luanaspirits.com?subject=My%20Soul%20Connection%20Quiz%20result&body=My%20result%3A%0A%0AWhat%20I%27m%20most%20wanting%20clarity%20on%3A%0A%0AHow%20long%20I%27ve%20been%20carrying%20this%3A%0A%0A" id="mailBtn">Email me your result</a>
+          <button class="btn" type="button" id="mailBtn">Email me your result</button>
           <a class="btn ghost" href="https://readings.luanaspirits.com/">Explore my readings</a>
           <a class="btn ghost" href="https://coaching.luanaspirits.com/">Explore 1:1 coaching</a>
         </div>
@@ -416,6 +432,21 @@
     </div>
   </section>
 </main>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetT">
+  <div class="panel">
+    <h3 id="sheetT">Send me your result 💜</h3>
+    <p>I love connecting with my community! Copy my email below and feel free to share your result, what you're wanting clarity on, and how long you've been carrying it. I read and reply to every message personally.</p>
+    <div class="field"><label for="fTo">My email</label><div class="row"><input class="val" id="fTo" readonly value="luana@luanaspirits.com"><button class="copy" type="button" data-copy="fTo">Copy</button></div></div>
+    <div class="field"><label for="fSub">Subject</label><div class="row"><input class="val" id="fSub" readonly value="Quiz results"><button class="copy" type="button" data-copy="fSub">Copy</button></div></div>
+    <div class="field"><label for="fBody">Your message (edit it however you like)</label><textarea class="val" id="fBody"></textarea><button class="copy" type="button" data-copy="fBody" style="padding:11px 14px">Copy message</button></div>
+    <div class="apps">
+      <a class="btn" id="gmailBtn" href="#" target="_blank" rel="noopener">Open in Gmail</a>
+      <a class="btn ghost" id="appBtn" href="#">Open my email app</a>
+    </div>
+    <button class="x" type="button" id="sheetClose">Close</button>
+  </div>
+</div>
 
 <footer class="wrap">
   <div class="sig">With love, Luana Spirits 💜</div>
@@ -577,13 +608,11 @@
       wrap.appendChild(el('p', 'rlead', r.lead));
       r.body.forEach(function (p) { wrap.appendChild(el('p', '', p)); });
       wrap.appendChild(el('p', '', '<b>Remember:</b> labels are labels. This result is a starting point for your own discernment, not a final verdict.'));
-      var bodyTxt = encodeURIComponent('My result: ' + r.plain + '\n\nWhat I\'m most wanting clarity on:\n\nHow long I\'ve been carrying this:\n\n');
-      var mhref = 'mailto:luana@luanaspirits.com?subject=' + encodeURIComponent('My Soul Connection Quiz result: ' + r.plain) + '&body=' + bodyTxt;
       var eb = el('div', 'emailbox');
       eb.appendChild(el('h4', '', 'Your next step'));
       eb.appendChild(el('p', '', '<b>Email me your result.</b> Tell me what you\'re most wanting clarity on and how long you\'ve been carrying it, and I\'ll personally reply with what I think would help you most. You don\'t need to tell me much about them. I\'m an evidential reader, and I\'d rather Spirit show me.'));
-      var mail = el('a', 'btn', 'Email me my result <small>I read and answer every message personally</small>');
-      mail.href = mhref; eb.appendChild(mail);
+      var mail = el('button', 'btn', 'Email me my result <small>I read and answer every message personally</small>');
+      mail.type = 'button'; mail.onclick = function () { openSheet(r.plain); }; eb.appendChild(mail);
       wrap.appendChild(eb);
       wrap.appendChild(el('h4', '', 'What women say after reading with me'));
       wrap.appendChild(el('div', 'mini-q', REV));
@@ -601,11 +630,45 @@
       again.onclick = function () { step = 0; picks = []; render(true); };
       wrap.appendChild(again);
       body.appendChild(wrap);
-      document.getElementById('mailBtn').href = mhref;
+      lastResult = r.plain;
       nm.focus({ preventScroll: true });
       document.getElementById('quiz').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
+  /* ---------- EMAIL SHEET ---------- */
+  var lastResult = '', sheet = document.getElementById('sheet'), opener = null;
+  function openSheet(res) {
+    res = res || lastResult;
+    var sub = 'Quiz results' + (res ? ': ' + res : '');
+    var msg = 'Hi Luana!\n\nMy quiz result: ' + (res || '') + '\n\nWhat I\'m most wanting clarity on:\n\nHow long I\'ve been carrying this:\n\n';
+    document.getElementById('fSub').value = sub;
+    document.getElementById('fBody').value = msg;
+    var to = 'luana@luanaspirits.com';
+    document.getElementById('gmailBtn').href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + to + '&su=' + encodeURIComponent(sub) + '&body=' + encodeURIComponent(msg);
+    document.getElementById('appBtn').href = 'mailto:' + to + '?subject=' + encodeURIComponent(sub) + '&body=' + encodeURIComponent(msg);
+    opener = document.activeElement;
+    sheet.classList.add('open');
+    document.getElementById('sheetT').tabIndex = -1; document.getElementById('sheetT').focus();
+  }
+  function closeSheet() { sheet.classList.remove('open'); if (opener && opener.focus) opener.focus(); }
+  document.getElementById('sheetClose').onclick = closeSheet;
+  sheet.addEventListener('click', function (e) { if (e.target === sheet) closeSheet(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && sheet.classList.contains('open')) closeSheet(); });
+  document.getElementById('mailBtn').onclick = function () { openSheet(); };
+  document.getElementById('fBody').addEventListener('input', function () {
+    var sub = document.getElementById('fSub').value, msg = this.value, to = 'luana@luanaspirits.com';
+    document.getElementById('gmailBtn').href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + to + '&su=' + encodeURIComponent(sub) + '&body=' + encodeURIComponent(msg);
+    document.getElementById('appBtn').href = 'mailto:' + to + '?subject=' + encodeURIComponent(sub) + '&body=' + encodeURIComponent(msg);
+  });
+  document.querySelectorAll('.copy').forEach(function (b) {
+    b.onclick = function () {
+      var f = document.getElementById(b.dataset.copy), t = f.value, label = b.textContent;
+      function ok() { b.textContent = 'Copied!'; b.classList.add('done'); setTimeout(function () { b.textContent = label; b.classList.remove('done'); }, 1600); }
+      if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(t).then(ok, fallback); } else { fallback(); }
+      function fallback() { f.removeAttribute('readonly'); f.select(); try { document.execCommand('copy'); ok(); } catch (e) {} if (f.tagName === 'INPUT') f.setAttribute('readonly', ''); }
+    };
+  });
+
   render(false);
 })();
 </script>
