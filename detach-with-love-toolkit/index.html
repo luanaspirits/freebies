@@ -1,1 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Detach With Love, a free guided journal from Luana Spirits for consciously releasing a soul connection while honoring your own peace, power, and self-love.">
+<title>Detach With Love: A Guide To Healthy Release</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Jost:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #1a0a20; --plum: #2a1233; --plum2: #3d1f47; --plum3: #5b2f6b;
+    --violet: #8b5fa8; --lav: #c9b3d9; --gold: #c9a55f; --gold2: #e3c27f;
+    --text: #efe4f3; --soft: #bfaec8; --line: rgba(227,194,127,.22); --line2: rgba(227,194,127,.45);
+    --card: rgba(255,255,255,.045);
+    --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --sans: 'Jost', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'DM Mono', ui-monospace, Menlo, monospace;
+    /* legacy names used in inline styles */
+    --gold-soft: #e3c27f; --muted: #bfaec8; --muted-2: #a993b5; --mirror: #c9b3d9; --line-strong: rgba(227,194,127,.45);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: var(--bg); -webkit-text-size-adjust: 100%; }
+  body { font-family: var(--sans); font-weight: 300; font-size: 16.5px; line-height: 1.7; color: var(--text);
+    background: radial-gradient(ellipse at 20% 0%, #4a2458 0%, var(--plum) 40%, var(--bg) 100%) fixed var(--bg); min-height: 100vh; overflow-x: hidden; }
+  #sparkles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .spark { position: absolute; border-radius: 50%; background: #fff; animation: tw 4s ease-in-out infinite; }
+  @keyframes tw { 0%,100% { opacity: .15 } 50% { opacity: .9 } }
+  @media (prefers-reduced-motion: reduce) { .spark { animation: none; opacity: .5 } }
+  #app { position: relative; z-index: 2; max-width: 720px; margin: 0 auto; padding: 0 20px; }
+  a { color: var(--gold2); }
+  a:focus-visible, button:focus-visible, .tab:focus-visible { outline: 2px solid var(--gold2); outline-offset: 3px; }
+  strong, b { font-weight: 500; color: var(--gold2); }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 500; color: var(--text); text-wrap: balance; margin-bottom: 12px; }
+  h1 { font-size: clamp(40px, 9vw, 64px); line-height: 1.04; }
+  h1 em, h2 em { color: var(--gold2); font-style: italic; }
+  h2 { font-size: clamp(26px, 5vw, 34px); line-height: 1.18; }
+  h3 { font-size: 20px; color: var(--gold2); line-height: 1.3; }
+  p { line-height: 1.75; color: var(--soft); font-size: 16px; margin-bottom: 14px; }
+  em.hl { font-family: var(--serif); font-style: italic; color: var(--gold2); }
+  .tagline { font-family: var(--serif); font-style: italic; color: var(--lav); font-size: clamp(18px, 3.4vw, 22px); line-height: 1.45; text-align: center; margin: 18px auto; max-width: 30ch; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 3.5px; text-transform: uppercase; color: var(--gold2); margin-bottom: 10px; }
+  .center { text-align: center; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 24px 22px; margin-bottom: 16px; }
+  .card.ritual { background: linear-gradient(160deg, var(--plum2), rgba(91,47,107,.35)); border-color: var(--line2); }
+  .safety-box { border-left: 3px solid var(--violet); background: rgba(139,95,168,.14); padding: 18px 20px; border-radius: 12px; margin-bottom: 20px; }
+  .safety-box p { font-size: 15px; color: var(--text); line-height: 1.7; margin: 0; }
+  .safety-box strong { color: var(--lav); }
 
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--sans); font-weight: 500; font-size: 15.5px; letter-spacing: .6px; padding: 14px 28px; border-radius: 40px; border: 0; cursor: pointer; text-decoration: none; line-height: 1.2; transition: transform .2s, box-shadow .2s, background .2s; }
+  .btn.gold { color: #fff; background: linear-gradient(135deg, var(--gold), var(--violet)); box-shadow: 0 8px 30px rgba(201,165,95,.25); }
+  .btn.gold:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(201,165,95,.35); }
+  .btn.ghost { background: transparent; color: var(--gold2); border: 1px solid var(--gold2); }
+  .btn.ghost:hover { background: rgba(227,194,127,.1); }
+  .btn.small { padding: 9px 18px; font-size: 13.5px; }
+  .btn.big { font-size: 17px; padding: 17px 34px; }
+  .btn:disabled { opacity: .35; cursor: not-allowed; }
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+
+  input[type=text], textarea { width: 100%; background: rgba(26,10,32,.55); border: 1px solid var(--line); border-radius: 12px; color: var(--text); font-family: var(--sans); font-size: 16px; font-weight: 300; padding: 13px 15px; line-height: 1.55; margin-bottom: 16px; transition: border-color .2s; }
+  textarea { resize: vertical; min-height: 92px; }
+  input[type=text]:focus, textarea:focus { outline: none; border-color: var(--gold2); }
+  ::placeholder { color: #8f7a9a; }
+  .journal-q { font-family: var(--serif); font-size: 18px; color: #fff; margin-bottom: 8px; line-height: 1.35; }
+
+  .gift-pill, .premium-pill { display: inline-block; font-family: var(--mono); font-size: 12px; letter-spacing: 1px; padding: 5px 12px; border-radius: 30px; background: var(--gold2); color: var(--plum); margin-bottom: 14px; }
+  .gate { padding: 34px 0 10px; text-align: center; }
+  .gate .card { text-align: left; max-width: 460px; margin: 26px auto 0; }
+
+  /* top bar + tabs, same as luanaspirits.com pages */
+  .topnav-wrap { position: sticky; top: 0; z-index: 10; padding-top: 14px; background: linear-gradient(var(--plum) 85%, rgba(42,18,51,0)); }
+  .topnav-brand { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 4px; }
+  .topnav-brand .sig { font-family: var(--serif); font-size: 22px; color: var(--gold2); text-decoration: none; cursor: pointer; }
+  .topnav-brand .sig em { color: var(--text); }
+  .topnav-brand .ver { font-family: var(--mono); font-size: 10.5px; letter-spacing: 2px; text-transform: uppercase; padding: 5px 11px; border-radius: 30px; border: 1px solid var(--line2); color: var(--gold2); }
+  .tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--line); margin-bottom: 26px; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex-shrink: 0; font-family: var(--mono); font-size: 11.5px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--soft); padding: 14px 11px 12px; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; background: none; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--gold2); border-bottom-color: var(--gold2); }
+
+  .step-progress { font-family: var(--mono); font-size: 11.5px; letter-spacing: 2.5px; color: var(--gold2); text-align: center; margin-bottom: 10px; }
+  .step-dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 24px; }
+  .step-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(227,194,127,.22); }
+  .step-dot.active { background: var(--gold2); width: 22px; border-radius: 4px; }
+  .step-dot.done { background: var(--violet); }
+
+  .accordion-item { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px; cursor: pointer; margin-bottom: 10px; transition: border-color .2s; }
+  .accordion-item:hover { border-color: var(--line2); }
+  .accordion-item .t { font-family: var(--serif); font-size: 18px; color: #fff; line-height: 1.35; }
+  .accordion-body { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 15.5px; color: var(--soft); line-height: 1.7; }
+  .accordion-body .q, .entry .q { font-family: var(--mono); font-size: 10.5px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold2); margin-top: 8px; }
+  .accordion-body .a, .entry .a { font-size: 15.5px; color: var(--text); margin-bottom: 6px; }
+
+  .save-reminder { border-left: 3px solid var(--violet); background: rgba(139,95,168,.14); border-radius: 12px; padding: 16px 18px; font-size: 14.5px; color: var(--text); margin-bottom: 20px; display: flex; gap: 10px; align-items: flex-start; line-height: 1.6; }
+
+  .boundary-card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; margin-bottom: 14px; }
+  .script-quote { font-family: var(--serif); font-style: italic; font-size: 18px; color: #fff; border-left: 2px solid var(--gold2); padding-left: 16px; margin: 12px 0; line-height: 1.5; }
+  .section-label { font-family: var(--mono); font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold2); margin: 28px 0 12px; }
+  .hint { text-align: center; font-family: var(--mono); font-size: 11.5px; color: var(--soft); letter-spacing: .5px; margin-top: 8px; }
+
+  /* who I am */
+  .about { display: flex; gap: 16px; align-items: center; margin-bottom: 8px; }
+  .about-mark { width: 54px; height: 54px; border-radius: 50%; background: var(--plum3); color: var(--gold2); display: grid; place-items: center; font-size: 22px; flex-shrink: 0; }
+  .about h3 { margin-bottom: 4px; }
+  .stats { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 16px; }
+  .stat { font-family: var(--mono); font-size: 11px; letter-spacing: 1px; padding: 5px 11px; border-radius: 30px; background: var(--plum3); color: var(--gold2); }
+  .small-book { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
+  .small-book span { font-size: 14px; color: var(--soft); }
+
+  /* go deeper */
+  .offer { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-bottom: 12px; text-decoration: none; transition: border-color .2s; }
+  .offer:hover { border-color: var(--line2); }
+  .offer-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .offer .t { font-family: var(--serif); font-size: 20px; color: #fff; line-height: 1.3; }
+  .offer .price { font-family: var(--mono); font-size: 12px; letter-spacing: 1px; padding: 4px 11px; border-radius: 30px; background: var(--plum3); color: var(--gold2); }
+  .offer .s { font-size: 15.5px; color: var(--soft); margin-top: 6px; line-height: 1.6; }
+  .offer .go { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold2); margin-top: 12px; }
+  .invite { text-align: center; border-radius: 24px; border: 1px solid var(--line2); background: linear-gradient(150deg, rgba(201,165,95,.18), rgba(139,95,168,.22) 55%, rgba(42,18,51,.6)); padding: 40px 22px; margin: 30px 0 10px; }
+  .invite h2 { margin-bottom: 12px; }
+  .invite p { max-width: 44ch; margin: 0 auto 20px; color: var(--text); }
+  .invite::before { content: "\2726"; display: block; color: var(--gold2); font-size: 13px; margin-bottom: 10px; }
+
+  /* footer, same as luanaspirits.com pages */
+  footer.site { position: relative; z-index: 1; text-align: center; padding-block: 50px 70px; margin-top: 40px; border-top: 1px solid var(--line); color: var(--soft); font-size: 14px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+  footer.site .sig { font-family: var(--serif); font-size: 26px; color: var(--gold2); }
+  footer.site .role { font-family: var(--mono); font-size: 11.5px; letter-spacing: 2px; text-transform: uppercase; }
+  footer.site .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; }
+  footer.site .links a { color: var(--soft); text-decoration: none; }
+  footer.site .links a:hover { text-decoration: underline; }
+  footer.site .email { user-select: all; color: var(--gold2); }
+  footer.site .legal { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; font-size: 13px; }
+  footer.site .legal a { color: var(--soft); }
+  footer.site .fine { font-size: 12.5px; max-width: 60ch; line-height: 1.6; opacity: .85; margin: 0; }
+
+  @media (max-width: 480px) {
+    .card { padding: 20px 18px; }
+    .tabs { flex-wrap: wrap; justify-content: center; overflow: visible; }
+    .tab { padding: 11px 8px 9px; font-size: 11px; letter-spacing: 1.3px; }
+    .btn.big { font-size: 16px; padding: 16px 28px; }
+  }
+</style>
+</head>
+<body>
+<div id="sparkles"></div>
+<div id="app"></div>
+
+<script>
+/* ---------- AMBIENT SPARKLES ---------- */
+(function initSparkles() {
+  const wrap = document.getElementById("sparkles");
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement("div");
+    s.className = "spark";
+    const size = 0.6 + Math.random() * 2;
+    s.style.width = size + "px"; s.style.height = size + "px";
+    s.style.left = Math.random() * 100 + "%"; s.style.top = Math.random() * 100 + "%";
+    s.style.animationDelay = (Math.random() * 4) + "s";
+    wrap.appendChild(s);
+  }
+})();
+
+/* ---------- DATA ---------- */
+
+const START_CONCEPTS = [
+  { icon: "\u{1F54A}", title: "What Conscious Detachment Actually Is", body: "Detachment is not the opposite of love, it's the opposite of attachment to a specific outcome or timeline. You can release your grip on how or when this connection unfolds, while still holding real love in your heart. Nothing about detaching erases what this connection meant." },
+  { icon: "\u2728", title: "This Is Your Choice, Not A Rule", body: "There's no universal rule that says you have to detach, and there's no rule that says you're failing if you do. This space exists for the specific choice you've already made, to step back for your own mental, emotional, and spiritual wellbeing. That choice deserves support, not judgment, including from yourself." },
+  { icon: "\u26A0", title: "When Detachment Might Be Needed", body: "Some signs it may be time to create distance: they aren't doing their own healing work, you consistently don't feel safe, seen, or prioritized, the relationship feels one-sided no matter how much you give, or you feel more depleted than expanded after contact. None of this means the connection wasn't real. It means your wellbeing gets to come first right now." },
+  { icon: "\u{1F6E1}", title: "Detachment Is Not Avoidance", body: "Healthy detachment comes from self-love, presence with your own peace, and clarity. Reactive withdrawal often comes from resentment, punishment, or fear. Both can look similar from the outside, the difference is what's happening inside you while you do it. This guide is built for the first one." },
+  { icon: "\u{1F49D}", title: "You Can Love Someone And Still Choose Distance", body: "Loving someone and staying close to them are not the same decision. You're allowed to love this connection, honor what it taught you, and still choose distance because it's what your wellbeing needs right now." }
+];
+
+const DETACH_STEPS = [
+  {
+    id: "name",
+    heading: "Name What You're Releasing",
+    fields: [
+      { key: "label", type: "text", label: "Who or what connection are you creating distance from?", placeholder: "A name, or however you think of them" },
+      { key: "context", type: "area", label: "What's been happening that led you to this choice? Write it exactly as it is." }
+    ]
+  },
+  {
+    id: "honor",
+    heading: "Honoring Your Reasons",
+    intro: "There's no need to justify this decision to anyone, including yourself. You're allowed to simply know.",
+    fields: [
+      { key: "ledHere", type: "area", label: "What led you to this decision?" },
+      { key: "needed", type: "area", label: "What have you been needing that hasn't been consistently there?" }
+    ]
+  },
+  {
+    id: "grieve",
+    heading: "Grieving This Chapter",
+    intro: "Detaching doesn't mean this connection didn't matter. Give yourself real space to feel what this chapter meant, grief and relief can live in the same body at the same time.",
+    fields: [
+      { key: "miss", type: "area", label: "What will you miss?" },
+      { key: "relief", type: "area", label: "What are you relieved to release?" }
+    ]
+  },
+  {
+    id: "release",
+    heading: "Releasing The Attachment To The Outcome",
+    ritual: "Place a hand on your heart. Say quietly: \u201CI release my grip on how or when this unfolds. I am allowed to let go of the outcome without letting go of the love. I trust myself to be okay either way.\u201D",
+    fields: [
+      { key: "grippingOutcome", type: "area", label: "What outcome have you been gripping onto?" },
+      { key: "setDown", type: "area", label: "What would it feel like to set down the need to control how this unfolds?" }
+    ]
+  },
+  {
+    id: "reclaim",
+    heading: "Reclaiming Your Energy",
+    intro: "Detachment isn't only about them, it's about what you're returning to yourself.",
+    fields: [
+      { key: "returning", type: "area", label: "What time, energy, or attention can now go back to you?" },
+      { key: "redirect", type: "area", label: "What do you want to redirect it toward?" }
+    ]
+  },
+  {
+    id: "boundary",
+    heading: "Setting The Boundary",
+    intro: "A boundary isn't a punishment, it's information about what you need to feel okay. Visit the Boundaries tab any time for scripts and examples.",
+    fields: [
+      { key: "boundarySet", type: "area", label: "What boundary are you setting?" },
+      { key: "honorIt", type: "area", label: "How will you honor it, even on the hard days?" }
+    ]
+  },
+  {
+    id: "closing",
+    heading: "Closing Ritual",
+    ritual: "Say quietly: \u201CI release you with love. I return to myself. My peace does not depend on your healing, your timing, or your choices. I am whole, right here, right now.\u201D",
+    fields: [
+      { key: "remember", type: "area", label: "What's one thing you want to remember on the hard days?" }
+    ]
+  }
+];
+
+const BOUNDARY_TYPES = [
+  { icon: "\u{1F6D1}", title: "No Contact", body: "A full pause on communication, in person, over text, on social media. Often used when contact consistently reopens the wound or makes healthy detachment impossible." },
+  { icon: "\u23F8", title: "Limited Or Structured Contact", body: "Contact only in specific circumstances, shared responsibilities, occasional check-ins, with clear limits on what you will and won't engage with." },
+  { icon: "\u{1F4F5}", title: "Digital Boundaries", body: "Muting, unfollowing, or archiving conversations, not necessarily forever, but for now, so your nervous system gets a real break from reminders." },
+  { icon: "\u{1F55B}", title: "Conditional Future Contact", body: "A boundary that isn't about never, it's about not yet, or not until specific things are true, consistent effort, safety, or honesty." }
+];
+
+const BOUNDARY_SCRIPTS = [
+  "I need space right now to focus on my own healing. I'll reach out if and when that changes.",
+  "I'm not available for [specific behavior] anymore. I care about you, and I also have to care for myself.",
+  "I'm choosing distance, not as punishment, but because it's what I need to feel okay."
+];
+
+/* ---------- OFFERS (public edition) ---------- */
+const STAN_URL = "https://stan.store/luanaspirits";
+const COACHING_URL = "https://coaching.luanaspirits.com";
+/* Community link: swap this for your new Skool URL once it's live (skool.com/union is retiring). */
+const COMMUNITY_URL = STAN_URL;
+
+const OFFERS = [
+  { icon: "\u{1F319}", title: "Union Alignment Snapshot", price: "CA$222", body: "Clarity on what's blocking you and the most aligned next step for you right now.", url: STAN_URL, go: "View on my Stan store" },
+  { icon: "\u{1F5D3}", title: "Twin Flame Union Timeline + Blueprint", price: "CA$555", body: "A 12-month forecast of the energy ahead for you and this connection.", url: STAN_URL, go: "View on my Stan store" },
+  { icon: "\u{1F6E4}", title: "The Union Pathway", price: "CA$777", body: "A 3-year look at where this connection is truly heading, so you can decide with your eyes open.", url: STAN_URL, go: "View on my Stan store" }
+];
+
+/* ---------- STATE ---------- */
+
+let state = {
+  name: "", screen: "name",
+  activeTab: "start", detachStep: 0,
+  current: {},
+  savedReleases: [], openEntry: null, openStartConcept: null, openBoundary: null
+};
+
+function go(patch) { state = { ...state, ...patch }; render(); }
+
+/* ---------- SHARED CHROME ---------- */
+
+function topNav() {
+  const tabs = [
+    { id: "start", label: "Start Here" },
+    { id: "process", label: "The Process" },
+    { id: "boundaries", label: "Boundaries" },
+    { id: "journal", label: "Journal" },
+    { id: "deeper", label: "Go Deeper" }
+  ];
+  return `<div class="topnav-wrap">
+    <div class="topnav-brand"><a class="sig" onclick="go({activeTab:'start'})">Luana <em>Spirits</em></a><span class="ver">Detach With Love</span></div>
+    <div class="tabs">${tabs.map(t => `<div class="tab ${state.activeTab === t.id ? "active" : ""}" onclick="selectTab('${t.id}')">${t.label}</div>`).join("")}</div>
+  </div>`;
+}
+
+function selectTab(id) {
+  const patch = { activeTab: id };
+  if (id === "process") { patch.detachStep = 0; patch.current = {}; }
+  go(patch);
+}
+
+function footer() {
+  return `<footer class="site">
+    <div class="sig">With love, Luana Spirits \u{1F49C}</div>
+    <div class="role">Psychic Medium &middot; Akashic Records Reader &middot; Love Coach</div>
+    <div class="links">
+      <a href="https://luanaspirits.com" target="_blank" rel="noopener">luanaspirits.com</a>
+      <a href="${STAN_URL}" target="_blank" rel="noopener">Readings</a>
+      <a href="${COACHING_URL}" target="_blank" rel="noopener">Coaching</a>
+      <a href="https://www.etsy.com/shop/LuanaSpirits" target="_blank" rel="noopener">Etsy</a>
+      <a href="https://www.tiktok.com/@luanaspirits" target="_blank" rel="noopener">TikTok</a>
+      <a href="https://www.instagram.com/luanaspirits" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.youtube.com/@luanaspirits/" target="_blank" rel="noopener">YouTube</a>
+    </div>
+    <div>Questions? <span class="email">luana@luanaspirits.com</span></div>
+    <nav class="legal" aria-label="Legal"><a href="https://luanaspirits.com/privacy/" target="_blank" rel="noopener">Privacy Policy</a><a href="https://luanaspirits.com/terms/" target="_blank" rel="noopener">Terms of Service</a></nav>
+    <p class="fine">Your journal is saved only in your own browser. Nothing you write here is sent to me or anyone else.</p>
+    <p class="fine">Readings, coaching and this guide are for spiritual guidance, personal growth and entertainment purposes only, and are not a substitute for therapy or medical, psychological, legal or financial advice.</p>
+    <p class="fine">&copy; 2026 Luana Spirits Consulting. All rights reserved.</p>
+  </footer>`;
+}
+
+/* ---------- NAME GATE ---------- */
+
+function renderName() {
+  document.getElementById("app").innerHTML = `
+    <div class="topnav-brand" style="padding-top:18px;"><a class="sig">Luana <em>Spirits</em></a><span class="ver">Free Gift</span></div>
+    <div class="gate">
+      <div class="eyebrow">A free gift from Luana Spirits</div>
+      <h1>Detach <em>with love.</em></h1>
+      <p class="tagline">You can release your grip on the outcome without letting go of the love.</p>
+      <p style="max-width:52ch;margin:0 auto 10px;">For anyone on the twin flame or soul connection journey who has made the conscious choice to step back, for your mental, emotional, and spiritual wellbeing. This isn't a rule. It's support for a decision you've already made.</p>
+      <p style="max-width:52ch;margin:0 auto;font-size:15px;">Everything here is free and yours to keep. Go at your own pace, and come back whenever you need it.</p>
+      <div class="card">
+        <div class="journal-q">What should I call you?</div>
+        <input type="text" id="nameInput" placeholder="Your first name" />
+        <button class="btn gold" onclick="submitName()">Begin</button>
+      </div>
+    </div>
+    ${footer()}
+  `;
+}
+
+function submitName() {
+  const val = document.getElementById("nameInput").value.trim();
+  go({ name: val || "beautiful soul", screen: "dashboard" });
+}
+
+/* ---------- START HERE ---------- */
+
+function startHtml() {
+  const cards = START_CONCEPTS.map((c, i) => {
+    const open = state.openStartConcept === i;
+    return `<div class="accordion-item" onclick="toggleStartConcept(${i})">
+      <div class="t">${c.icon} ${c.title}</div>
+      ${open ? `<div class="accordion-body">${c.body}</div>` : ""}
+    </div>`;
+  }).join("");
+  return `
+    <h2>\u{1F54A} Understanding Conscious Detachment</h2>
+    <div class="safety-box">
+      <p><strong>A note before you begin:</strong> if you're currently in an unsafe or abusive situation, please prioritize your physical safety first and reach out to a professional or local support service. This guide is for emotional and energetic detachment, and works alongside real safety planning, not in place of it.</p>
+    </div>
+    <p>Tap each card below to explore it.</p>
+    ${cards}
+    <div class="btn-row"><button class="btn gold" onclick="selectTab('process')">Begin The Detachment Process &rarr;</button></div>
+    ${aboutHtml()}
+  `;
+}
+
+function toggleStartConcept(i) {
+  state.openStartConcept = state.openStartConcept === i ? null : i;
+  render();
+}
+
+/* ---------- THE DETACHMENT PROCESS ---------- */
+
+function processHtml() {
+  const step = DETACH_STEPS[state.detachStep];
+  const isLast = state.detachStep === DETACH_STEPS.length - 1;
+  const dots = DETACH_STEPS.map((s, i) => `<div class="step-dot ${i === state.detachStep ? "active" : i < state.detachStep ? "done" : ""}"></div>`).join("");
+
+  const fields = step.fields.map(f => {
+    const val = state.current[f.key] || "";
+    if (f.type === "text") {
+      return `<div class="journal-q">${f.label}</div><input type="text" id="f-${f.key}" placeholder="${f.placeholder || ""}" value="${val.replace(/"/g, "&quot;")}" />`;
+    }
+    return `<div class="journal-q">${f.label}</div><textarea id="f-${f.key}">${val}</textarea>`;
+  }).join("");
+
+  return `
+    <div class="step-progress">STEP ${state.detachStep + 1} OF ${DETACH_STEPS.length}</div>
+    <div class="step-dots">${dots}</div>
+    <h2>${step.heading}</h2>
+    ${step.intro ? `<p>${step.intro}</p>` : ""}
+    ${step.ritual ? `<div class="card ritual"><p style="margin-bottom:0; color:var(--gold-soft); font-family:'Playfair Display', serif; font-style:italic; font-size:16px;">${step.ritual}</p></div>` : ""}
+    <div class="card">${fields}</div>
+    <div class="btn-row">
+      ${state.detachStep > 0 ? `<button class="btn ghost" onclick="processNav(-1)">&larr; Back</button>` : ""}
+      ${isLast
+        ? `<button class="btn gold" onclick="saveRelease()">Save This Reflection</button>`
+        : `<button class="btn gold" onclick="processNav(1)">Continue &rarr;</button>`}
+    </div>
+  `;
+}
+
+function processNav(dir) {
+  const step = DETACH_STEPS[state.detachStep];
+  step.fields.forEach(f => {
+    const el = document.getElementById("f-" + f.key);
+    if (el) state.current[f.key] = el.value;
+  });
+  go({ detachStep: state.detachStep + dir });
+}
+
+function saveRelease() {
+  const step = DETACH_STEPS[state.detachStep];
+  step.fields.forEach(f => {
+    const el = document.getElementById("f-" + f.key);
+    if (el) state.current[f.key] = el.value;
+  });
+  const entry = { date: new Date().toLocaleString(), label: state.current.label || "Untitled Connection", data: { ...state.current } };
+  state.savedReleases.push(entry);
+  go({ activeTab: "journal", detachStep: 0, current: {} });
+}
+
+/* ---------- BOUNDARIES TOOLKIT ---------- */
+
+function boundariesHtml() {
+  const cards = BOUNDARY_TYPES.map((b, i) => {
+    const open = state.openBoundary === i;
+    return `<div class="accordion-item" onclick="toggleBoundary(${i})">
+      <div class="t">${b.icon} ${b.title}</div>
+      ${open ? `<div class="accordion-body">${b.body}</div>` : ""}
+    </div>`;
+  }).join("");
+
+  const existing = state.savedReleases.length ? null : null;
+  const existingBoundaryEntry = state.boundaryJournal || {};
+
+  return `
+    <h2>\u{1F6E1} Boundaries Toolkit</h2>
+    <p>A boundary is not an ultimatum and it's not punishment. It's information about what you need in order to feel okay. Come back here any time you need to set or reset one.</p>
+    <div class="section-label">Types Of Boundaries</div>
+    ${cards}
+    <div class="section-label">Scripts You Can Personalize</div>
+    <div class="card">
+      ${BOUNDARY_SCRIPTS.map(s => `<div class="script-quote">\u201C${s}\u201D</div>`).join("")}
+    </div>
+    <div class="section-label">\u{1F338} What Do You Need Right Now</div>
+    <div class="card">
+      <div class="journal-q">What boundary do you need right now?</div>
+      <textarea id="b-need">${existingBoundaryEntry.need || ""}</textarea>
+      <div class="journal-q">What would honoring it look like today, specifically?</div>
+      <textarea id="b-honor">${existingBoundaryEntry.honor || ""}</textarea>
+      <button class="btn gold small" onclick="saveBoundaryJournal()">${existingBoundaryEntry.need ? "\u2726 Update" : "Save"}</button>
+    </div>
+  `;
+}
+
+function toggleBoundary(i) {
+  state.openBoundary = state.openBoundary === i ? null : i;
+  render();
+}
+
+function saveBoundaryJournal() {
+  state.boundaryJournal = {
+    need: document.getElementById("b-need").value,
+    honor: document.getElementById("b-honor").value,
+    date: new Date().toLocaleString()
+  };
+  render();
+}
+
+/* ---------- MY JOURNAL ---------- */
+
+function journalHtml() {
+  const sorted = [...state.savedReleases].map((e, i) => ({ ...e, idx: i })).reverse();
+  const entries = sorted.map(e => {
+    const open = state.openEntry === e.idx;
+    return `<div class="accordion-item" onclick="toggleEntry(${e.idx})">
+      <div class="t">${e.label} <span style="font-family:'DM Mono', monospace; font-size:10px; color:var(--muted-2); font-weight:400;">&middot; ${e.date}</span></div>
+      ${open ? releaseDetailHtml(e.data) : ""}
+    </div>`;
+  }).join("");
+
+  const boundaryEntry = state.boundaryJournal && state.boundaryJournal.need ? `
+    <div class="accordion-item" onclick="toggleEntry('boundary')">
+      <div class="t">\u{1F6E1} Boundary Reflection <span style="font-family:'DM Mono', monospace; font-size:10px; color:var(--muted-2); font-weight:400;">&middot; ${state.boundaryJournal.date}</span></div>
+      ${state.openEntry === "boundary" ? `<div class="accordion-body"><div class="q">What I needed</div><div class="a">${state.boundaryJournal.need}</div>${state.boundaryJournal.honor ? `<div class="q">How I'd honor it</div><div class="a">${state.boundaryJournal.honor}</div>` : ""}</div>` : ""}
+    </div>` : "";
+
+  const empty = entries === "" && !boundaryEntry ? "<p>Nothing here yet. Start the Detachment Process or set a boundary to begin filling this in.</p>" : "";
+
+  return `
+    <h2>\u{1F4D3} My Journal, ${state.name}</h2>
+    <div class="save-reminder"><span>\u{1F49C}</span><span><strong>Your answers save automatically</strong>, right here in this browser, on this device. Close the tab, come back next week, it'll still be here. It won't follow you to a different browser or device though, and clearing your browser's data will erase it, so download your journal now and then whenever you want a backup you can keep.</span></div>
+    ${boundaryEntry}
+    ${entries || empty}
+    <div class="btn-row">
+      <button class="btn gold" onclick="downloadJournal()">Download My Journal</button>
+      <button class="btn ghost" onclick="selectTab('process')">Start Another Release</button>
+    </div>
+    ${state.savedReleases.length ? `<div class="invite">
+      <div class="eyebrow">You did something brave today</div>
+      <h2>I'm so proud of you.</h2>
+      <p>Releasing with love takes real courage. Be gentle with yourself today. And whenever you feel curious to go deeper, there's a little more support waiting for you.</p>
+      <button class="btn gold big" onclick="selectTab('deeper')">See Ways To Go Deeper</button>
+    </div>` : ""}
+  `;
+}
+
+function releaseDetailHtml(d) {
+  const rows = [
+    ["What's been happening", d.context],
+    ["What led me here", d.ledHere],
+    ["What I've been needing", d.needed],
+    ["What I'll miss", d.miss],
+    ["What I'm relieved to release", d.relief],
+    ["What outcome I've been gripping", d.grippingOutcome],
+    ["What it would feel like to set it down", d.setDown],
+    ["What's returning to me", d.returning],
+    ["What I want to redirect it toward", d.redirect],
+    ["The boundary I'm setting", d.boundarySet],
+    ["How I'll honor it", d.honorIt],
+    ["What I want to remember", d.remember]
+  ];
+  const html = rows.filter(r => r[1]).map(r => `<div class="q">${r[0]}</div><div class="a">${r[1]}</div>`).join("");
+  return `<div class="accordion-body">${html || "<em>No details recorded.</em>"}</div>`;
+}
+
+function toggleEntry(i) {
+  state.openEntry = state.openEntry === i ? null : i;
+  render();
+}
+
+function downloadJournal() {
+  let text = "DETACH WITH LOVE\nMy Journal, " + state.name + "\n\n";
+  let any = false;
+  if (state.boundaryJournal && state.boundaryJournal.need) {
+    text += "== " + state.boundaryJournal.date + " \u00B7 Boundary Reflection ==\n";
+    text += "What I needed: " + state.boundaryJournal.need + "\n";
+    if (state.boundaryJournal.honor) text += "How I'd honor it: " + state.boundaryJournal.honor + "\n";
+    text += "\n";
+    any = true;
+  }
+  if (state.savedReleases.length) {
+    [...state.savedReleases].reverse().forEach(e => {
+      text += "== " + e.date + " \u00B7 " + e.label + " ==\n";
+      const d = e.data;
+      const rows = [
+        ["What's been happening", d.context],
+        ["What led me here", d.ledHere],
+        ["What I've been needing", d.needed],
+        ["What I'll miss", d.miss],
+        ["What I'm relieved to release", d.relief],
+        ["What outcome I've been gripping", d.grippingOutcome],
+        ["What it would feel like to set it down", d.setDown],
+        ["What's returning to me", d.returning],
+        ["What I want to redirect it toward", d.redirect],
+        ["The boundary I'm setting", d.boundarySet],
+        ["How I'll honor it", d.honorIt],
+        ["What I want to remember", d.remember]
+      ];
+      rows.forEach(r => { if (r[1]) text += r[0] + ": " + r[1] + "\n"; });
+      text += "\n";
+      any = true;
+    });
+  }
+  if (!any) text += "No entries yet.\n";
+  const blob = new Blob([text], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "my-detach-with-love-journal.txt";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ---------- WHO I AM ---------- */
+
+function aboutHtml() {
+  return `
+    <div class="section-label" style="margin-top:34px;">Who I Am</div>
+    <div class="card">
+      <div class="about">
+        <div class="about-mark">\u{1F54A}</div>
+        <div>
+          <h3 style="margin-bottom:6px;">Hi, I'm Luana.</h3>
+          <div class="stats"><span class="stat">6 YEARS ON ETSY</span><span class="stat">4,000+ READINGS</span><span class="stat">PSYCHIC MEDIUM</span></div>
+        </div>
+      </div>
+      <p>I made this guide because I know how much it hurts to love someone and not know what to do with that love.</p>
+      <p>My twin flame and I went through separation before we found our way to union, and today we're married. What that journey taught me is that coming back to yourself is never wasted, no matter what happens with the connection.</p>
+      <p>This guide isn't a strategy to get anyone back. It's for you, your peace, and the life you choose for yourself.</p>
+      <div class="small-book"><a class="btn ghost small" href="${STAN_URL}" target="_blank" rel="noopener">Book with me</a><span>Readings and coaching, whenever you feel called.</span></div>
+    </div>
+  `;
+}
+
+/* ---------- GO DEEPER (the invitation) ---------- */
+
+function deeperHtml() {
+  const offers = OFFERS.map(o => `<a class="offer" href="${o.url}" target="_blank" rel="noopener">
+      <div class="offer-top"><div class="t">${o.icon} ${o.title}</div><div class="price">${o.price}</div></div>
+      <div class="s">${o.body}</div>
+      <div class="go">${o.go} &rarr;</div>
+    </a>`).join("");
+  return `
+    <h2>\u2728 Go Deeper</h2>
+    <p>You don't need anything else to heal. Everything in this guide is yours to keep, and you can come back to it as often as you like.</p>
+    <p>And if you ever feel curious to go deeper, here's how I can support you. Every reading is really a healing session in itself.</p>
+
+    <div class="section-label">Readings</div>
+    ${offers}
+
+    <div class="section-label">1:1 Coaching</div>
+    <a class="offer" href="${COACHING_URL}" target="_blank" rel="noopener">
+      <div class="offer-top"><div class="t">\u{1F49C} Coaching With Me</div></div>
+      <div class="s">For when you want support choosing what you want in love and living it. DM me <strong style="color:var(--gold-soft);">CERTAIN</strong> on TikTok or Instagram and we'll see if coaching is a fit.</div>
+      <div class="go">Learn about coaching &rarr;</div>
+    </a>
+
+    <div class="section-label">Community</div>
+    <a class="offer" href="${COMMUNITY_URL}" target="_blank" rel="noopener">
+      <div class="offer-top"><div class="t">\u{1F338} My Community</div></div>
+      <div class="s">A soft place to land with other women doing the inner work around love, with ongoing support from me.</div>
+      <div class="go">Find the community &rarr;</div>
+    </a>
+
+    <div class="invite">
+      <div class="eyebrow">An invitation</div>
+      <h2>Your healing is yours.</h2>
+      <p>Whatever you choose next, I'm so proud of you for choosing yourself today. If you'd love to receive a reading, I'd be honored to read for you.</p>
+      <a class="btn gold big" href="${STAN_URL}" target="_blank" rel="noopener">Explore My Readings</a>
+    </div>
+  `;
+}
+
+/* ---------- ROUTER ---------- */
+
+const STORAGE_KEY = "detach-with-love-public-v1";
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) state = { ...state, ...JSON.parse(raw) };
+    if (state.activeTab === "learn") state.activeTab = "deeper";
+  } catch (e) { /* corrupted or unavailable, start fresh */ }
+}
+
+function render() {
+  saveState();
+  if (state.screen === "name") { renderName(); return; }
+  let content = "";
+  if (state.activeTab === "start") content = startHtml();
+  else if (state.activeTab === "process") content = processHtml();
+  else if (state.activeTab === "boundaries") content = boundariesHtml();
+  else if (state.activeTab === "journal") content = journalHtml();
+  else if (state.activeTab === "deeper") content = deeperHtml();
+
+  document.getElementById("app").innerHTML = `
+    ${topNav()}
+    ${content}
+    ${footer()}
+  `;
+}
+
+loadState();
+render();
+</script>
+
+<!--
+  BUILD NOTES (PUBLIC EDITION):
+  Separate file from the member edition. Gifted to Etsy clients and warm leads.
+  Member-only Skool lessons removed. Offers live in the OFFERS block.
+  When the new Skool link is live, set COMMUNITY_URL near the top of the script.
+  Uses its own storage key, so it never mixes with the member edition's journal.
+-->
+</body>
+</html>
