@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Separation Decoder</title>
+<meta name="description" content="A free 2-minute check-in from Luana Spirits: find out which separation you're really in, what it's asking of you, and whether to reach out or wait.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #1a0a20; --plum: #2a1233; --plum2: #3d1f47; --plum3: #5b2f6b;
+    --violet: #8b5fa8; --lav: #c9b3d9; --gold: #c9a55f; --gold2: #e3c27f;
+    --text: #efe4f3; --soft: #bfaec8; --line: rgba(227,194,127,.22);
+    --card: rgba(255,255,255,.045); --white: #fff; --shade: rgba(26,10,32,.55);
+    --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --sans: 'Jost', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'DM Mono', ui-monospace, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); scroll-behavior: smooth; }
+  body {
+    margin: 0; font-family: var(--sans); font-weight: 300; font-size: 17px; line-height: 1.7;
+    color: var(--text); background: radial-gradient(ellipse at 20% 0%, #4a2458 0%, var(--plum) 40%, var(--bg) 100%) fixed var(--bg);
+    min-height: 100vh;
+  }
+  #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star { position: absolute; border-radius: 50%; background: var(--white); animation: tw 4s infinite ease-in-out; }
+  @keyframes tw { 0%,100% { opacity: .15 } 50% { opacity: .9 } }
+  @media (prefers-reduced-motion: reduce) { .star { animation: none; opacity: .5 } html { scroll-behavior: auto } }
+
+  b, strong { font-weight: 500; color: var(--gold2); }
+  em { font-family: var(--serif); font-style: italic; }
+  a { color: var(--gold2); }
+  a:focus-visible, .btn:focus-visible, button:focus-visible { outline: 2px solid var(--gold2); outline-offset: 3px; }
+
+  .wrap { position: relative; z-index: 1; max-width: 760px; margin: 0 auto;
+    padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+  section { padding-block: 40px; scroll-margin-top: 20px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 3.5px; text-transform: uppercase; color: var(--gold2); }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 500; text-wrap: balance; margin: 0; }
+  h2 { font-size: clamp(28px, 5.4vw, 38px); line-height: 1.15; }
+  h2 em { color: var(--gold2); }
+  h3 { font-size: 21px; color: var(--gold2); line-height: 1.3; }
+  p { margin: 0; }
+  .stack { display: flex; flex-direction: column; gap: 18px; }
+  .rule { height: 2px; width: 100%; background: linear-gradient(90deg, var(--gold), var(--violet) 60%, transparent); }
+  .head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .muted { color: var(--soft); }
+  .pill { font-family: var(--mono); font-size: 12px; letter-spacing: 1px; padding: 5px 12px; border-radius: 30px; background: var(--plum3); color: var(--gold2); }
+  .pill.solid { background: var(--gold); color: var(--plum); }
+  .facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--sans); font-weight: 500; font-size: 16px; letter-spacing: .6px; color: var(--white); text-decoration: none; background: linear-gradient(135deg, var(--gold), var(--violet)); border-radius: 40px; padding: 15px 30px; box-shadow: 0 8px 30px rgba(201,165,95,.25); transition: transform .2s, box-shadow .2s; border: 0; cursor: pointer; text-align: center; }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(201,165,95,.35); }
+  .btn.ghost { background: transparent; border: 1px solid var(--gold2); color: var(--gold2); box-shadow: none; }
+  .btn.ghost:hover { background: rgba(227,194,127,.1); }
+  .btn.sm { padding: 11px 20px; font-size: 14.5px; }
+  .cta-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+
+  /* HEADER */
+  .top { position: relative; z-index: 1; text-align: center; padding-block: 56px 10px; }
+  .top .wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .top h1 { font-size: clamp(42px, 10vw, 76px); line-height: 1.02; }
+  .top h1 em { color: var(--gold2); display: block; }
+  .tagline { font-family: var(--serif); font-style: italic; color: var(--lav); font-size: clamp(18px, 3.4vw, 22px); max-width: 36ch; line-height: 1.45; }
+  .welcome { font-size: 16px; color: var(--soft); max-width: 54ch; }
+
+  /* TOP CTA BAND */
+  .band { display: flex; flex-direction: column; gap: 14px; align-items: center; text-align: center; padding: 22px; border-radius: 20px; border: 1px solid var(--line); background: linear-gradient(135deg, rgba(201,165,95,.12), rgba(139,95,168,.18)); }
+  .band p { color: var(--soft); font-size: 15.5px; max-width: 50ch; }
+
+  /* TRUTHS */
+  .truths { display: grid; gap: 12px; counter-reset: t; }
+  .truth { counter-increment: t; display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding: 18px; border-radius: 16px; background: var(--card); border: 1px solid var(--line); }
+  .truth::before { content: counter(t); width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--plum3); color: var(--gold2); font-family: var(--serif); font-size: 20px; }
+  .truth h3 { font-size: 19px; margin-bottom: 4px; }
+  .truth p { color: var(--soft); font-size: 16px; }
+  .truth q { font-family: var(--serif); font-style: italic; color: var(--lav); }
+
+  /* QUIZ */
+  .quiz { border-radius: 24px; border: 1px solid rgba(227,194,127,.5); background: linear-gradient(160deg, var(--plum2), rgba(91,47,107,.35)); padding: 26px 20px; box-shadow: 0 0 60px rgba(227,194,127,.12); }
+  @media (min-width: 680px) { .quiz { padding: 34px; } }
+  .progress { height: 4px; border-radius: 4px; background: rgba(255,255,255,.08); overflow: hidden; margin-bottom: 20px; }
+  .progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), var(--violet)); transition: width .35s; }
+  .qnum { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; color: var(--soft); text-transform: uppercase; }
+  .qtext { font-family: var(--serif); font-size: clamp(22px, 4.6vw, 28px); line-height: 1.3; margin: 8px 0 20px; color: var(--white); }
+  .opts { display: grid; gap: 10px; }
+  .opt { text-align: left; font: inherit; font-size: 16px; color: var(--text); background: var(--shade); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; cursor: pointer; transition: border-color .2s, background .2s; line-height: 1.5; }
+  .opt:hover { border-color: var(--gold2); background: rgba(227,194,127,.08); }
+  .quiz-nav { display: flex; justify-content: space-between; margin-top: 16px; }
+  .link-btn { background: none; border: 0; color: var(--soft); font-family: var(--mono); font-size: 12px; letter-spacing: 1px; cursor: pointer; padding: 6px 0; }
+  .link-btn:hover { color: var(--gold2); }
+
+  /* RESULT */
+  .result { display: flex; flex-direction: column; gap: 20px; }
+  .result .type { font-family: var(--serif); font-size: clamp(32px, 7vw, 46px); line-height: 1.08; color: var(--white); }
+  .result .type em { color: var(--gold2); }
+  .result .sub { font-family: var(--serif); font-style: italic; color: var(--lav); font-size: 19px; }
+  .block { padding: 18px; border-radius: 16px; background: var(--card); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+  .block .label { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold2); }
+  .block p { color: var(--text); font-size: 16px; }
+  .block blockquote { margin: 0; font-family: var(--serif); font-style: italic; color: var(--lav); font-size: 17px; border-left: 2px solid var(--gold); padding-left: 14px; }
+  ol.days { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; font-size: 16px; }
+  ol.days li::marker { color: var(--gold2); font-family: var(--mono); font-size: 13px; }
+  .reading-cta { text-align: center; padding: 22px 18px; border-radius: 18px; border: 1px solid rgba(227,194,127,.5); background: linear-gradient(135deg, rgba(201,165,95,.16), rgba(139,95,168,.24)); display: flex; flex-direction: column; gap: 14px; align-items: center; }
+  .reading-cta p { color: var(--soft); font-size: 15.5px; max-width: 46ch; }
+  .share { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
+  .share p { font-size: 15px; color: var(--soft); max-width: 48ch; }
+  .email { user-select: all; color: var(--gold2); font-family: var(--mono); font-size: 14px; }
+  .toast { font-family: var(--mono); font-size: 12px; color: var(--gold2); min-height: 18px; }
+  .lead { padding: 22px 18px; border-radius: 18px; border: 1px solid var(--line); background: var(--shade); display: flex; flex-direction: column; gap: 14px; }
+  .lead > p { font-size: 15.5px; color: var(--soft); }
+  .lead-form { display: flex; flex-direction: column; gap: 14px; }
+  .lead-form .f { display: flex; flex-direction: column; gap: 6px; font: 400 11px var(--mono); letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold2); }
+  .lead-form .f .opt-tag { color: var(--soft); }
+  .lead-form input, .lead-form textarea { width: 100%; background: rgba(26,10,32,.7); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; color: #fff; font: 300 16px var(--sans); text-transform: none; letter-spacing: 0; }
+  .lead-form textarea { min-height: 90px; resize: vertical; line-height: 1.5; }
+  .lead-form input::placeholder, .lead-form textarea::placeholder { color: rgba(191,174,200,.55); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font: 400 14.5px var(--sans); color: var(--text); background: rgba(26,10,32,.55); border: 1px solid var(--line); border-radius: 30px; padding: 8px 14px; cursor: pointer; text-transform: none; letter-spacing: 0; text-align: left; }
+  .chip[aria-pressed="true"] { background: var(--gold); color: var(--plum); border-color: var(--gold); }
+  .ferr { color: #f2a7b8; font-size: 14.5px; min-height: 0; }
+  .tiny { font-size: 13px; color: var(--soft); text-align: center; }
+  .sent { text-align: center; display: flex; flex-direction: column; gap: 8px; }
+  .sent .big { font-family: var(--serif); font-size: 24px; color: #fff; }
+  .btn.wide { width: 100%; flex-direction: column; gap: 2px; }
+  .btn.wide small { font-weight: 300; font-size: 12.5px; opacity: .85; letter-spacing: .3px; }
+
+  /* BRIGHTER DIMMER */
+  .check { display: grid; gap: 10px; }
+  .tog { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: start; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--shade); cursor: pointer; font-size: 16px; text-align: left; color: var(--text); font-family: inherit; line-height: 1.5; }
+  .tog .box { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--gold2); display: grid; place-items: center; color: var(--plum); font-size: 14px; }
+  .tog[aria-pressed="true"] { border-color: var(--gold2); background: rgba(227,194,127,.1); }
+  .tog[aria-pressed="true"] .box { background: var(--gold2); }
+  .tog[aria-pressed="true"] .box::before { content: "\2713"; }
+  .verdict { margin-top: 16px; padding: 18px; border-radius: 16px; border: 1px dashed rgba(201,179,217,.4); background: rgba(139,95,168,.1); text-align: center; display: flex; flex-direction: column; gap: 6px; }
+  .verdict .v { font-family: var(--serif); font-size: 26px; color: var(--white); }
+  .verdict p { color: var(--soft); font-size: 15.5px; }
+
+  /* STORY */
+  .story { display: flex; flex-direction: column; gap: 14px; padding: 24px; border-radius: 20px; background: var(--card); border: 1px solid var(--line); }
+  .story p { color: var(--soft); }
+  .story .pull { font-family: var(--serif); font-style: italic; font-size: 21px; color: var(--white); line-height: 1.45; }
+
+  /* PATHS */
+  .paths { display: grid; gap: 14px; }
+  @media (min-width: 700px) { .paths { grid-template-columns: 1fr 1fr; } }
+  .path { position: relative; display: flex; flex-direction: column; gap: 12px; padding: 26px 22px 22px; border-radius: 20px; border: 1px solid var(--line); background: var(--card); }
+  .path.feat { border-color: rgba(227,194,127,.55); background: linear-gradient(160deg, var(--plum2), rgba(91,47,107,.35)); box-shadow: 0 0 50px rgba(227,194,127,.1); }
+  .path .crown { position: absolute; top: -12px; left: 22px; }
+  .path .amt { font-family: var(--serif); font-size: 40px; color: var(--white); line-height: 1; }
+  .path .amt small { font-family: var(--mono); font-size: 12px; color: var(--soft); letter-spacing: 1px; }
+  .path p { color: var(--soft); font-size: 15.5px; }
+  .path .btn { margin-top: auto; }
+  ul.marks { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; font-size: 15.5px; }
+  ul.marks li { position: relative; padding-left: 26px; }
+  ul.marks li::before { content: "\2726"; position: absolute; left: 0; color: var(--gold2); font-size: 13px; line-height: 1.9; }
+  .fine-note { font-size: 13.5px; color: var(--soft); text-align: center; }
+
+  .final { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 18px; padding-block: 50px 20px; }
+  .final h2 { max-width: 18ch; }
+  .final .sign { font-family: var(--serif); font-style: italic; color: var(--lav); font-size: 19px; }
+
+  footer { position: relative; z-index: 1; text-align: center; padding-block: 40px 120px; color: var(--soft); font-size: 14px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+  footer .sig { font-family: var(--serif); font-size: 26px; color: var(--gold2); }
+  footer .role { font-family: var(--mono); font-size: 11.5px; letter-spacing: 2px; text-transform: uppercase; }
+  footer .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; }
+  footer .links a { text-decoration: none; }
+  footer .legal { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; font-size: 13px; }
+  footer .legal a { color: var(--soft); }
+  footer .fine { font-size: 12.5px; max-width: 60ch; line-height: 1.6; opacity: .85; }
+
+  .bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); background: rgba(26,10,32,.92); backdrop-filter: blur(10px); border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; transform: translateY(110%); transition: transform .35s ease; }
+  .bar.show { transform: none; }
+  .bar .l { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+  .bar .l b { font-family: var(--serif); font-weight: 500; font-size: 16px; color: var(--white); }
+  .bar .l span { font-family: var(--mono); font-size: 11.5px; color: var(--gold2); }
+  .bar .btn { padding: 11px 20px; font-size: 14.5px; box-shadow: none; flex: 0 0 auto; }
+  @media (min-width: 900px) { .bar { left: auto; right: calc(24px + env(safe-area-inset-right, 0px)); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); border-radius: 40px; border: 1px solid var(--line); padding: 8px 8px 8px 22px; } }
+  @media (prefers-reduced-motion: reduce) { .bar, .btn, .opt, .progress i { transition: none; } }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div id="stars" aria-hidden="true"></div>
+
+<!-- ===== HEADER ===== -->
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">A free gift from @luanaspirits</div>
+    <h1>The Separation <em>Decoder</em></h1>
+    <p class="tagline">Find out which separation you're really in, what it's asking of you, and whether to reach out or wait.</p>
+    <p class="welcome">Beautiful soul, take a breath. If you've been replaying every message, checking their page, and asking Source for a sign, you're not crazy and you're not alone. This takes two minutes. Your answer is waiting at the end.</p>
+    <div class="facts">
+      <span class="pill">5 questions</span>
+      <span class="pill">4 separation patterns</span>
+      <span class="pill">A 7-day practice</span>
+    </div>
+    <div class="cta-row" style="margin-top:6px">
+      <a class="btn" href="#decoder">Start the Decoder</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ===== TOP CTA ===== -->
+  <section style="padding-top:30px;padding-bottom:10px">
+    <div class="band">
+      <div class="eyebrow">Want your own connection read?</div>
+      <p>This guide shows you the pattern. A reading shows you what's happening in yours: what's going on for them, whether it's worth your energy, and when it shifts.</p>
+      <a class="btn sm" href="https://stan.store/LuanaSpirits/p/the-first-light-reading" target="_blank" rel="noopener" data-book>Book my First Light Reading</a>
+    </div>
+  </section>
+
+  <!-- ===== TRUTHS ===== -->
+  <section id="truths">
+    <div class="head">
+      <div class="eyebrow">Before you decode</div>
+      <h2>Five truths about separation <em>nobody told you.</em></h2>
+    </div>
+    <div class="truths">
+      <div class="truth"><div><h3>It isn't only no contact.</h3><p>Separation is any state where you're not happy with the level of connection, where there's emotional distance. You can be texting every day, or even sleeping next to each other, and still be in it.</p></div></div>
+      <div class="truth"><div><h3>"Running" is usually a wound, not a verdict on you.</h3><p>When someone pulls away, it's often a feeling of <q>I can't let her see me like this.</q> That's a self-worth wound they're carrying. It explains the distance. It doesn't mean you have to sit in it.</p></div></div>
+      <div class="truth"><div><h3>You don't have to pretend you don't care.</h3><p>You were probably told to detach. Here's what I learned instead: <q>union isn't created by pretending that you don't want it.</q> You can want it and still stand in your power.</p></div></div>
+      <div class="truth"><div><h3>You're not here to wait forever.</h3><p>A true connection heals at a reasonable pace and chooses union too. You get to be available for union, and nothing in between: no hot and cold, no breadcrumbs.</p></div></div>
+      <div class="truth"><div><h3>Other people's timelines aren't yours.</h3><p>Reading endless "years of separation" stories can be really inflammatory for your nervous system. It takes time for the physical world to catch up, but you're never stuck in an energy.</p></div></div>
+    </div>
+  </section>
+
+  <div class="rule" role="presentation"></div>
+
+  <!-- ===== DECODER ===== -->
+  <section id="decoder">
+    <div class="head">
+      <div class="eyebrow">The Decoder</div>
+      <h2>Which separation <em>are you in?</em></h2>
+      <p class="muted">Pick the answer that feels most true today, not the one you think you should pick.</p>
+    </div>
+
+    <div class="quiz" id="quiz" aria-live="polite">
+      <div id="qwrap">
+        <div class="progress"><i id="prog"></i></div>
+        <div class="qnum" id="qnum"></div>
+        <div class="qtext" id="qtext"></div>
+        <div class="opts" id="opts"></div>
+        <div class="quiz-nav"><button class="link-btn" id="back" type="button">&larr; Back</button><span></span></div>
+      </div>
+
+      <div class="result" id="result" hidden></div>
+    </div>
+  </section>
+
+  <!-- ===== BRIGHTER OR DIMMER ===== -->
+  <section id="check">
+    <div class="head">
+      <div class="eyebrow">Before you hit send</div>
+      <h2>The Brighter or <em>Dimmer Check</em></h2>
+      <p class="muted">"Should I reach out?" is the question I'm asked most. Here's the question I ask back: does reaching out make your energy brighter or dimmer? Tap every line that's true right now.</p>
+    </div>
+    <div class="check" id="checklist">
+      <button class="tog" type="button" aria-pressed="false"><span class="box"></span><span>I'd still feel okay if they replied with one word, or not at all.</span></button>
+      <button class="tog" type="button" aria-pressed="false"><span class="box"></span><span>I'm reaching out to share something true, not to get a reaction.</span></button>
+      <button class="tog" type="button" aria-pressed="false"><span class="box"></span><span>I've felt my feelings first, instead of texting to escape them.</span></button>
+      <button class="tog" type="button" aria-pressed="false"><span class="box"></span><span>I'd be proud of this message tomorrow morning.</span></button>
+    </div>
+    <div class="verdict" id="verdict">
+      <div class="v" id="vt">Tap what's true</div>
+      <p id="vp">Your answer appears here.</p>
+    </div>
+  </section>
+
+  <!-- ===== STORY ===== -->
+  <section>
+    <div class="story">
+      <div class="eyebrow">Why I made this</div>
+      <p class="pull">My husband and I were in separation for one year and eight months. It wasn't fully no contact. It was distance, plus all the emotional blocks we each had to work through.</p>
+      <p>There wasn't one magic moment that ended it. It was a series of choices. Part of me wasn't fully choosing union yet, and I had a habit of emotionally withdrawing. When I finally stated clearly what I wanted, and meant it, everything moved.</p>
+      <p>I didn't force myself to detach. I chose myself, held my standard, and let the connection meet me there. That's what I want for you.</p>
+    </div>
+  </section>
+
+  <div class="rule" role="presentation"></div>
+
+  <!-- ===== PATHS ===== -->
+  <section id="paths">
+    <div class="head" style="text-align:center;align-items:center">
+      <div class="eyebrow">When you're ready for your own answers</div>
+      <h2>Two ways to <em>work with me.</em></h2>
+    </div>
+    <div class="paths">
+      <div class="path">
+        <span class="pill crown">Start here</span>
+        <h3>The First Light Reading</h3>
+        <div class="amt">CA$55</div>
+        <p>My first-time reading, made for exactly where you are. Bring your separation question and I'll read what's happening in your connection and what your next step is.</p>
+        <ul class="marks">
+          <li>Written reading, channelled for you</li>
+          <li>Clarity on whether this connection is worth your energy</li>
+          <li>Love it? Your CA$55 comes off your first membership month if you join within 7 days</li>
+        </ul>
+        <a class="btn" href="https://stan.store/LuanaSpirits/p/the-first-light-reading" target="_blank" rel="noopener" data-book>Book First Light</a>
+      </div>
+      <div class="path feat">
+        <span class="pill solid crown">Founding spots close Nov 25</span>
+        <h3>The Soul Path Membership</h3>
+        <div class="amt">CA$333<small> / month</small></div>
+        <p>Ongoing 1:1 guidance with me, for women who are done waiting and ready to move through this with support every month.</p>
+        <ul class="marks">
+          <li>Your first reading is the Union Blueprint, my 12-month love forecast (CA$555 on its own)</li>
+          <li>A deep 1:1 reading every month, built around what you're moving through</li>
+          <li>Live group Q&amp;A calls with me between readings</li>
+          <li>Seasonal readings redeemable as your monthly reading</li>
+        </ul>
+        <a class="btn" href="https://readings.luanaspirits.com/membership/" target="_blank" rel="noopener" data-book>See the membership</a>
+      </div>
+    </div>
+    <p class="fine-note" style="margin-top:16px">Not sure your person is a twin flame at all? <a href="https://freebies.luanaspirits.com/soul-connection-quiz/" target="_blank" rel="noopener">Take my Soul Connection Quiz</a>.</p>
+  </section>
+
+  <!-- ===== FINAL ===== -->
+  <section class="final">
+    <div class="eyebrow">Your separation isn't a waiting room</div>
+    <h2>It's a crossroads, <em>and you get to choose.</em></h2>
+    <p class="muted" style="max-width:50ch">Come back to this page whenever the pull gets loud. And when you want to know what's really happening on their side, I'm here.</p>
+    <div class="cta-row">
+      <a class="btn" href="https://stan.store/LuanaSpirits/p/the-first-light-reading" target="_blank" rel="noopener" data-book>Book my First Light Reading</a>
+      <a class="btn ghost" href="https://readings.luanaspirits.com/membership/" target="_blank" rel="noopener">Explore the membership</a>
+    </div>
+    <p class="sign">With so much love 💜🌙</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="sig">With love, Luana Spirits 💜</div>
+  <div class="role">Psychic Medium · Akashic Records Reader · Love Coach</div>
+  <div class="links">
+    <a href="https://luanaspirits.com">luanaspirits.com</a>
+    <a href="https://readings.luanaspirits.com/">Readings</a>
+    <a href="https://coaching.luanaspirits.com/">Coaching</a>
+    <a href="https://www.tiktok.com/@luanaspirits" target="_blank" rel="noopener">TikTok</a>
+    <a href="https://www.instagram.com/luanaspirits" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.youtube.com/@luanaspirits/" target="_blank" rel="noopener">YouTube</a>
+  </div>
+  <div>Questions? <span class="email">luana@luanaspirits.com</span></div>
+  <nav class="legal" aria-label="Legal">
+    <a href="https://luanaspirits.com/privacy/">Privacy Policy</a>
+    <a href="https://luanaspirits.com/terms/">Terms of Service</a>
+  </nav>
+  <p class="fine">Readings and guides are for spiritual guidance, personal growth and entertainment purposes only, and are not a substitute for therapy or medical, psychological, legal or financial advice. No outcome is guaranteed.</p>
+  <p class="fine">&copy; 2026 Luana Spirits Consulting. All rights reserved.</p>
+</footer>
+
+<div class="bar" id="bar" aria-hidden="true">
+  <div class="l"><b>The First Light Reading</b><span>CA$55 · your first step with me</span></div>
+  <a class="btn" href="https://stan.store/LuanaSpirits/p/the-first-light-reading" target="_blank" rel="noopener" tabindex="-1">Book now</a>
+</div>
+
+<script>
+(function () {
+  // stars
+  var s = document.getElementById('stars');
+  for (var i = 0; i < 70; i++) {
+    var d = document.createElement('div'); d.className = 'star';
+    var z = Math.random() * 2 + 1;
+    d.style.cssText = 'width:' + z + 'px;height:' + z + 'px;left:' + Math.random() * 100 + '%;top:' + Math.random() * 100 + '%;animation-delay:' + Math.random() * 4 + 's';
+    if (Math.random() < .2) d.style.background = '#e3c27f';
+    s.appendChild(d);
+  }
+
+  // ===== DECODER DATA =====
+  // R = Revolving Door, S = Silent Wall, T = Third Party Detour, C = Close but Far
+  var Q = [
+    { q: "What does the distance look like right now?", o: [
+      ["They come back, it feels amazing, then they disappear again.", "R"],
+      ["Silence. Ghosted, blocked, or no contact.", "S"],
+      ["They're with someone else.", "T"],
+      ["We talk, or we're even together, but I feel so far away.", "C"] ] },
+    { q: "When they do show up, it usually feels like…", o: [
+      ["Fireworks, and then one-word replies.", "R"],
+      ["They don't really show up anymore.", "S"],
+      ["Mixed, because someone else is in the picture.", "T"],
+      ["Polite and surface level. I'm carrying the conversation.", "C"] ] },
+    { q: "The question that keeps you up at night:", o: [
+      ["Why do they keep coming back if they're just going to leave?", "R"],
+      ["Did I push them away?", "S"],
+      ["How do I get past this resentment?", "T"],
+      ["Why am I the one doing all the work?", "C"] ] },
+    { q: "What would help you most this week?", o: [
+      ["Knowing whether to stop answering when they pop back in.", "R"],
+      ["Knowing whether to reach out at all.", "S"],
+      ["Knowing if this connection is still mine to hold.", "T"],
+      ["Knowing how to say what I actually need.", "C"] ] },
+    { q: "Be honest: what have you been doing with your energy?", e: true, o: [
+      ["Waiting. Trying to be patient until they're ready.", "wait"],
+      ["Reaching out, then regretting it.", "chase"],
+      ["Checking their socials, their energy, or getting readings on them.", "watch"],
+      ["Overthinking. I can't stop thinking about them.", "spin"] ] }
+  ];
+
+  var TYPES = {
+    R: {
+      name: "The <em>Revolving Door</em>",
+      sub: "In, out, in, out. And every time they come back, it all floods back.",
+      what: "This inconsistency in the energy, the reaching out and then being gone, is really, really normal in a deep connection. Usually the person leaving is dealing with a wound around self-worth. Their tension and desire to connect gets wired to a fear of being abandoned, so they leave first.",
+      ask: "To stop accepting breadcrumbs. Not to punish them, but because you're only available for union. Nothing in between, nothing hot and cold.",
+      reach: "<b>Don't reach out to restart the loop.</b> If you speak, speak once and from wholeness: say what you desire and what you won't accept anymore. Then let them step up or step out.",
+      quote: "You're not going to wait indefinitely for them.",
+      days: [
+        "Write one sentence that starts with “I am only available for…” and read it every morning.",
+        "Next time they pop back in, wait an hour before replying. Use the Brighter or Dimmer Check below.",
+        "Ask yourself: “What does this pattern remind me of from earlier in my life?”",
+        "Write down the boundary you want to hold, and the consequence if it's crossed. A boundary must be upheld by you.",
+        "Give yourself the feeling you've been chasing from them: one thing today that makes you feel chosen by you.",
+        "Notice where you're also coming in and out of your own life (your routines, your joy).",
+        "Read your sentence from day 1 out loud. How much of it do you believe now?"
+      ]
+    },
+    S: {
+      name: "The <em>Silent Wall</em>",
+      sub: "No reply, no contact, and a thousand questions about what you did wrong.",
+      what: "Just because the silence is happening, nothing has gone wrong. What people don't see when a separation is happening is how much healing is taking place on both sides. Silence is often someone sitting alone with what they can't yet face.",
+      ask: "To stop making the silence mean something about your worth, and to move your energy back into your own life instead of the empty inbox.",
+      reach: "<b>Try my letter exercise first.</b> Write a letter expressing completely how you feel: the past, what you need now, all of it. Then check whether sending it feels brighter or dimmer. If brighter, send it and release it. If dimmer, the letter was for you.",
+      quote: "Union isn't created by pretending that you don't want it.",
+      days: [
+        "Write the letter. Every word. Don't edit it.",
+        "Read it back and run the Brighter or Dimmer Check below. Decide: send or keep.",
+        "Mute (not block) their page for 7 days. Every check is a vote for the past.",
+        "Place a hand on your heart and say: “I'm so sorry you learned that romantic longing leads to pain.”",
+        "Ask: “What do I start believing about myself when they go silent?” Write it down.",
+        "Do one thing you'd do if you already knew it would work out.",
+        "Notice what moved this week in you, not in them."
+      ]
+    },
+    T: {
+      name: "The <em>Third Party Detour</em>",
+      sub: "They're with someone else, and you're left holding the connection and the resentment.",
+      what: "This is one of the most painful parts of separation, and your anger makes sense. Here's what I see over and over: karmic and third party connections tend to dissolve the more you stay connected to yourself, not the more you compete, watch or wait.",
+      ask: "To get really honest about whether this connection is still yours to hold, and to stop giving your energy to a story you can't control.",
+      reach: "<b>Don't reach out to compete or to be the secret.</b> You're not available for a half-connection. If you speak, speak to your standard, not to their relationship.",
+      quote: "It's not about who you attract. It's about who you choose.",
+      days: [
+        "Write down everything you resent. Don't make it pretty.",
+        "Ask: “How is this making me feel, and what does this feeling remind me of?”",
+        "Unfollow or mute the third party's page. Protect your nervous system.",
+        "Say out loud what you'd need for this connection to be worth your energy.",
+        "Notice any “waiting for them to choose” thoughts and reframe: what do I choose?",
+        "Do something that reconnects you to your own magnetism: dress up, dance, create.",
+        "Re-read day 4. Does it still feel true? That's your answer for now."
+      ]
+    },
+    C: {
+      name: "Close, <em>but Far</em>",
+      sub: "You're talking, maybe even together, but your heart feels a world away.",
+      what: "There can still be emotional separation even when you're right next to each other. Often both people are protecting themselves: one withdraws, the other over-gives and carries the connection. I know this one personally. I had a habit of emotionally withdrawing too.",
+      ask: "To say what you actually need, instead of over-giving and hoping they'll notice.",
+      reach: "<b>Yes, reach out, with truth.</b> Not a hint, not a test. Say what you're feeling and what you need now. You're doing this from love, not to punish anyone, including yourself.",
+      quote: "It is okay to take intentional space, and actually very healthy too.",
+      days: [
+        "List what you're giving in this connection. Circle what you're giving to be loved.",
+        "Ask: “Where am I withdrawing too?”",
+        "Write the one need you've been afraid to say.",
+        "Say it, simply. No over-explaining.",
+        "Take one evening of intentional space, just for you.",
+        "Notice whether their energy gets brighter or dimmer when you hold your ground.",
+        "Write what you've learned about what you need in love."
+      ]
+    }
+  };
+
+  var ENERGY = {
+    wait:  "<b>You've been waiting.</b> Patience is beautiful, but waiting indefinitely isn't patience. It's putting your life on hold. Union is chosen by both people, not left up to the universe.",
+    chase: "<b>You've been reaching out, then regretting it.</b> You may be chasing the feeling they gave you. The good news: you can learn to give yourself that feeling, and then reaching out stops feeling so desperate.",
+    watch: "<b>You've been watching from a distance.</b> Every check of their page, their energy or another reading on them keeps you living in their story. Try 7 days of looking at your own life instead.",
+    spin:  "<b>You've been overthinking.</b> Constant thinking is really a trauma response. Emotional healing can never be thought through. It has to be felt, deeply, in your body."
+  };
+
+  var answers = [], step = 0;
+  var qnum = document.getElementById('qnum'), qtext = document.getElementById('qtext'), opts = document.getElementById('opts');
+  var prog = document.getElementById('prog'), back = document.getElementById('back');
+  var qwrap = document.getElementById('qwrap'), result = document.getElementById('result');
+
+  function render() {
+    var item = Q[step];
+    qnum.textContent = 'Question ' + (step + 1) + ' of ' + Q.length;
+    qtext.textContent = item.q;
+    prog.style.width = (step / Q.length * 100) + '%';
+    opts.innerHTML = '';
+    item.o.forEach(function (o) {
+      var b = document.createElement('button');
+      b.className = 'opt'; b.type = 'button'; b.textContent = o[0];
+      b.addEventListener('click', function () { answers[step] = o[1]; step++; step < Q.length ? render() : show(); });
+      opts.appendChild(b);
+    });
+    back.style.visibility = step === 0 ? 'hidden' : 'visible';
+  }
+  back.addEventListener('click', function () { if (step > 0) { step--; render(); } });
+
+  function pick() {
+    var c = { R: 0, S: 0, T: 0, C: 0 };
+    for (var i = 0; i < 4; i++) c[answers[i]] += (i === 0 ? 1.5 : 1);
+    var best = 'R';
+    Object.keys(c).forEach(function (k) { if (c[k] > c[best]) best = k; });
+    return best;
+  }
+
+  function energyLabel(e) { return { wait: 'Waiting', chase: 'Reaching out, then regretting it', watch: 'Watching from a distance', spin: 'Overthinking' }[e]; }
+
+  /* ---------- LEAD FORM (sends to Luana's inbox via FormSubmit) ---------- */
+  var TO_EMAIL = 'luana@luanaspirits.com';
+  var MEMBERSHIP = 'https://readings.luanaspirits.com/membership/';
+  var FIRST_LIGHT = 'https://stan.store/LuanaSpirits/p/the-first-light-reading';
+  var HOW_LONG = ['Less than 3 months', '3 to 12 months', '1 to 2 years', 'More than 2 years'];
+  var NEXT = ['A reading on my connection', 'Ongoing 1:1 support with you', 'Just the free tools for now'];
+
+  function chipGroup(list) {
+    var wrap = document.createElement('div'); wrap.className = 'chips'; wrap.value = '';
+    list.forEach(function (t) {
+      var c = document.createElement('button'); c.type = 'button'; c.className = 'chip'; c.textContent = t; c.setAttribute('aria-pressed', 'false');
+      c.addEventListener('click', function () {
+        wrap.querySelectorAll('.chip').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+        c.setAttribute('aria-pressed', 'true'); wrap.value = t;
+      });
+      wrap.appendChild(c);
+    });
+    return wrap;
+  }
+
+  function leadForm(res, energy) {
+    var box = document.createElement('div'); box.className = 'lead';
+    box.innerHTML = '<div class="eyebrow">Send me your result</div><p><b>I’d love to hear from you.</b> Tell me what you’re most wanting clarity on, and I’ll personally reply with what I think would help you most. No need to tell me all about them. I’d rather Spirit show me.</p>';
+    var f = document.createElement('form'); f.className = 'lead-form'; f.noValidate = true;
+    f.innerHTML =
+      '<label class="f">First name<input name="name" autocomplete="given-name" placeholder="Your first name"></label>' +
+      '<label class="f">Email<input name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com"></label>' +
+      '<label class="f">What are you most wanting clarity on?<textarea name="clarity" placeholder="One sentence is perfect"></textarea></label>' +
+      '<div class="f" id="f-long">How long have you been in this separation?</div>' +
+      '<div class="f" id="f-next">What would feel most supportive right now?</div>' +
+      '<label class="f">Instagram or TikTok handle <span class="opt-tag">(optional, so I can voice note you)</span><input name="social" autocomplete="off" placeholder="@yourhandle"></label>' +
+      '<div class="ferr" role="alert"></div>' +
+      '<button class="btn wide" type="submit">Send me my result 💜<small>I read and answer every message personally</small></button>' +
+      '<p class="tiny">You’ll get a copy of your result by email too.</p>';
+    var longG = chipGroup(HOW_LONG), nextG = chipGroup(NEXT);
+    f.querySelector('#f-long').appendChild(longG);
+    f.querySelector('#f-next').appendChild(nextG);
+    var btn = f.querySelector('button[type=submit]'), err = f.querySelector('.ferr');
+    var fN = f.querySelector('[name=name]'), fE = f.querySelector('[name=email]'), fC = f.querySelector('[name=clarity]'), fS = f.querySelector('[name=social]');
+    f.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var name = fN.value.trim(), email = fE.value.trim(), clarity = fC.value.trim();
+      if (!name) { err.textContent = 'Please add your first name.'; fN.focus(); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Please add a valid email so I can reply to you.'; fE.focus(); return; }
+      if (!clarity) { err.textContent = 'Just one sentence about what you want clarity on.'; fC.focus(); return; }
+      err.textContent = '';
+      var next = nextG.value || '(not answered)';
+      var tag = next === NEXT[1] ? 'HOT: wants 1:1' : next === NEXT[0] ? 'WARM: wants a reading' : 'NURTURE';
+      var qa = Q.map(function (item, i) {
+        var pickTxt = ''; item.o.forEach(function (o) { if (o[1] === answers[i]) pickTxt = o[0]; });
+        return (i + 1) + '. ' + item.q + ' → ' + pickTxt;
+      }).join('\n');
+      var payload = {
+        _subject: 'Separation Decoder | ' + tag + ' | ' + res + ' | ' + name,
+        _replyto: email, _template: 'box', _captcha: 'false',
+        _autoresponse: 'Hi ' + name + '! Thank you so much for taking my Separation Decoder. 💜\n\nYour separation pattern: ' + res + '\nYour energy pattern: ' + energy + '\n\nCome back to your 7-day practice whenever the pull gets loud: https://freebies.luanaspirits.com/separation-decoder/\n\nI’ll personally read your message and reply soon.\n\nIf you want your own connection read in the meantime, the First Light Reading is my first-time reading: ' + FIRST_LIGHT + '\n\nAnd if you’re ready for ongoing support, the Soul Path Membership is my 1:1 monthly guidance, starting with your Union Blueprint: ' + MEMBERSHIP + '\n\nWith love,\nLuana Spirits 🌙',
+        'LEAD TEMPERATURE': tag,
+        'NAME': name, 'EMAIL': email, 'SOCIAL HANDLE': fS.value.trim() || '(not given)',
+        'SEPARATION PATTERN': res, 'ENERGY PATTERN': energy,
+        'WANTS CLARITY ON': clarity,
+        'IN SEPARATION FOR': longG.value || '(not answered)',
+        'WANTS NEXT': next,
+        'DECODER ANSWERS': qa
+      };
+      btn.disabled = true; btn.firstChild.textContent = 'Sending...';
+      fetch('https://formsubmit.co/ajax/' + TO_EMAIL, {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload)
+      }).then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (d) {
+          if (!r.ok || String(d.success) === 'false') throw new Error('fail');
+          box.innerHTML = '';
+          var ok = document.createElement('div'); ok.className = 'sent';
+          var big = document.createElement('div'); big.className = 'big'; big.textContent = 'It’s on its way, ' + name + '. 💜'; ok.appendChild(big);
+          var p = document.createElement('p'); p.className = 'muted'; p.textContent = 'I’ll personally read your message and reply by email. Keep an eye on your inbox (and your spam folder, just in case).'; ok.appendChild(p);
+          box.appendChild(ok);
+        });
+      }).catch(function () {
+        err.innerHTML = 'That didn’t send. Please check your connection and try again, or email me at <span class="email">luana@luanaspirits.com</span>.';
+        btn.disabled = false; btn.firstChild.textContent = 'Send me my result 💜';
+      });
+    });
+    box.appendChild(f);
+    return box;
+  }
+
+  function strip(h) { var d = document.createElement('div'); d.innerHTML = h; return d.textContent; }
+
+  function show() {
+    var k = pick(), t = TYPES[k], e = answers[4];
+    var plainName = strip(t.name);
+    var days = t.days.map(function (d) { return '<li>' + d + '</li>'; }).join('');
+    result.innerHTML =
+      '<div class="progress"><i style="width:100%"></i></div>' +
+      '<div class="eyebrow">Your separation pattern</div>' +
+      '<div class="type">' + t.name + '</div>' +
+      '<p class="sub">' + t.sub + '</p>' +
+      '<div class="block"><span class="label">What’s really happening</span><p>' + t.what + '</p></div>' +
+      '<div class="block"><span class="label">What it’s asking of you</span><p>' + t.ask + '</p></div>' +
+      '<div class="block"><span class="label">Reach out or wait?</span><p>' + t.reach + '</p></div>' +
+      '<div class="block"><span class="label">Your energy pattern</span><p>' + ENERGY[e] + '</p></div>' +
+      '<div class="block"><span class="label">Hold onto this</span><blockquote>' + t.quote + '</blockquote></div>' +
+      '<div class="block"><span class="label">Your 7-day practice</span><ol class="days">' + days + '</ol></div>' +
+      '<div class="reading-cta"><div class="eyebrow">The part a guide can’t tell you</div>' +
+        '<h3 style="color:var(--white);font-size:24px">What’s happening on <em style="color:var(--gold2)">their</em> side, and when does it shift?</h3>' +
+        '<p>That’s what I read for. Your First Light Reading looks at your connection directly, so you can stop guessing and start choosing.</p>' +
+        '<a class="btn" href="https://stan.store/LuanaSpirits/p/the-first-light-reading" target="_blank" rel="noopener">Book my First Light Reading · CA$55</a>' +
+        '<a href="https://readings.luanaspirits.com/membership/" target="_blank" rel="noopener" style="font-size:14.5px">Ready for ongoing support? See the Soul Path Membership →</a></div>' +
+      '<div id="leadslot"></div>' +
+      '<div class="share"><button class="link-btn" type="button" id="redo">↺ Take it again</button></div>';
+    qwrap.hidden = true; result.hidden = false;
+    document.getElementById('leadslot').appendChild(leadForm(plainName, energyLabel(e)));
+    document.getElementById('decoder').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('redo').addEventListener('click', function () { answers = []; step = 0; result.hidden = true; qwrap.hidden = false; render(); });
+  }
+  render();
+
+  // ===== BRIGHTER OR DIMMER =====
+  var togs = document.querySelectorAll('.tog'), vt = document.getElementById('vt'), vp = document.getElementById('vp'), touched = false;
+  function verdict() {
+    var n = 0; togs.forEach(function (t) { if (t.getAttribute('aria-pressed') === 'true') n++; });
+    if (!touched) return;
+    if (n === 4) { vt.textContent = 'Brighter ✦'; vp.textContent = 'You’re reaching out from wholeness. Say it simply, then put your energy back into your own life, whatever they reply.'; }
+    else if (n >= 2) { vt.textContent = 'Pause'; vp.textContent = 'Write the message, but sleep on it. Read it again tomorrow and run this check one more time.'; }
+    else { vt.textContent = 'Dimmer'; vp.textContent = 'Tonight the energy goes back to you. Write the letter instead (it’s in your Decoder result), and let it be for you.'; }
+  }
+  togs.forEach(function (t) { t.addEventListener('click', function () { touched = true; t.setAttribute('aria-pressed', t.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); verdict(); }); });
+
+  // ===== STICKY BAR =====
+  var bar = document.getElementById('bar'), start = document.getElementById('truths'), fin = document.querySelector('.final');
+  var past = false, finIn = false;
+  function upd() { var on = past && !finIn; bar.classList.toggle('show', on); bar.setAttribute('aria-hidden', !on); bar.querySelector('a').tabIndex = on ? 0 : -1; }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) { past = en[0].boundingClientRect.top < 0; upd(); }).observe(start);
+    new IntersectionObserver(function (en) { finIn = en[0].isIntersecting; upd(); }).observe(fin);
+  }
+})();
+</script>
+</body>
+</html>
