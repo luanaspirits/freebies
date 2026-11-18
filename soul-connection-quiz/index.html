@@ -146,6 +146,9 @@
   footer .legal { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; font-size: 13px; }
   footer .legal a { color: var(--soft); }
   footer .fine { font-size: 12.5px; max-width: 60ch; line-height: 1.6; opacity: .85; }
+  .lq { font-family: var(--serif); font-style: italic; color: var(--lav); font-size: 18px; line-height: 1.5; border-left: 2px solid var(--gold2); padding-left: 14px; }
+  .lq small { display: block; font: 400 11px var(--mono); font-style: normal; letter-spacing: 1px; color: var(--gold2); margin-top: 6px; }
+  ul.nx { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
 </style>
 </head>
 <body>
@@ -201,15 +204,15 @@
 
   /* ---------- ONE FACT ABOUT LUANA PER QUESTION ---------- */
   var FACTS = [
-    ['Hi, I\'m Luana', 'I\'m a psychic medium and love coach. Since 2019 I\'ve done more than 4,000 readings, mostly for divine feminines navigating twin flame, soulmate and karmic connections.', 'me'],
-    ['A little about me', 'I was born very logical. It was my own intuitive experiences that opened me up, and led me to become a psychic and reader.', 'me'],
-    ['I\'ve been where you are', 'Before I met my husband, I was completely convinced certain connections were my twin flame. They were intense and impossible to walk away from. Looking back, they were catalysts.', 'me'],
-    ['What changed everything', 'Meeting my husband showed me what aligned love actually feels like. Gentle. Peaceful. Grounded. It completely changed how I read and coach.', 'couple'],
-    ['How I read', 'I\'m an evidential reader. I\'d rather you don\'t tell me much about your connection. I let Spirit show me, so you can feel for yourself whether it resonates.', 'me'],
-    ['Labels are labels', 'I don\'t believe a twin flame has to look one specific way. Every connection is its own. But after thousands of readings, I\'ve noticed some very clear patterns.', 'me'],
-    ['Here\'s where it gets nuanced', 'Karmic cycles can show up in any connection, even a twin flame. Intensity and triggers alone don\'t make someone your twin flame. It takes things actually moving in real life.', 'me'],
-    ['What clients say', '<q>I didn\'t give her any details other than our first names, and she nailed it.</q> Etsy review · 4.9 stars from 1,000+ reviews', 'me'],
-    ['Almost there', 'A reading is never meant to make decisions for you. It gives you clarity, so you can move forward from your own power.', 'couple']
+    ["Hi, I'm Luana", "I'm a psychic medium and love coach. Since 2019 I've done more than 4,000 readings, mostly for divine feminines navigating twin flame, soulmate and karmic connections.", "me"],
+    ["A little about me", "I was born very logical. It was my own intuitive experiences that opened me up, and led me to become a psychic and reader.", "me"],
+    ["I've been where you are", "I met several catalysts before my husband. Each one had some element of what I was manifesting, but never the whole picture. I call those micro-manifestations.", "me"],
+    ["What changed everything", "Meeting my husband felt like soul recognition, and yes, triggers too. But I knew, because <q>this connection is making me a better person.</q>", "couple"],
+    ["How I read", "I'm an evidential reader. I'd rather you don't tell me much about your connection. I let Spirit show me, so you can feel for yourself whether it resonates.", "me"],
+    ["What real union looks like", "<q>In true twin flame connections, when you reach out or make a positive shift, there's at least an effort. Even if it's not perfect, they're trying to meet you.</q>", "me"],
+    ["Here's where it gets nuanced", "Karmic cycles can show up in any connection, even a twin flame. Intensity and triggers alone don't make someone your twin flame. It takes things actually moving in real life.", "me"],
+    ["What clients say", "<q>I didn't give her any details other than our first names, and she nailed it.</q> Etsy review \u00b7 4.9 stars from 1,000+ reviews", "me"],
+    ["A myth I'll never teach", "That you have to wait for someone to heal, or be fully healed yourself, before union. Love really is a day-to-day choice, made by both of you.", "couple"]
   ];
 
   var QUIZ = [
@@ -264,27 +267,33 @@
     tf: { name: 'Aligned <em>Twin Flame</em> Energy', plain: 'Aligned Twin Flame Energy',
       lead: 'What you described has the qualities I see in aligned, healed twin flame connections: growth in the same direction, and love that grounds in real life.',
       body: ['It feels peaceful more often than it feels chaotic. You can talk. You know where you stand. That gentle, steady feeling is not a lack of passion. It is what love feels like when it is healed.',
-             'Even aligned connections move through seasons, and old patterns can still surface. Keep choosing each other in the physical world, and let the connection keep proving itself through action.'] },
+             'Even aligned connections move through seasons, and old patterns can still surface. Keep choosing each other in the physical world, and let the connection keep proving itself through action.'],
+      quote: "the true energy of twin flame union is very stable and very loving.", next: ["Picture the in-union version of this connection, then ask yourself: how can I advocate for that version of it?", "Don't be afraid to express your desire for union. There's nothing unfeminine about stating your needs.", "Keep choosing each other. Union is 50% giving and 50% receiving love."] },
     tfk: { name: 'Twin Flame Energy <em>with Karmic Patterns</em>', plain: 'Twin Flame Energy with Karmic Patterns',
       lead: 'There is a deep soul recognition here, and there are karmic cycles running through it too. Both can be true at once.',
       body: ['This is one of the most confusing places to be, because the bond feels undeniable, while the day-to-day keeps pulling you back into the same painful loops.',
-             'The real question is not "is this my twin flame?" It is: can this cycle heal, and are you both choosing to grow? That is where clarity changes everything.'] },
+             'The real question is not "is this my twin flame?" It is: can this cycle heal, and are you both choosing to grow? That is where clarity changes everything.'],
+      quote: "in true twin flame connections, when you reach out or make a positive shift, there's at least an effort.", next: ["If you want communication, communicate. Any movement in any direction gives you clarity.", "Try the brighter or dimmer test: imagine reaching out, and notice whether your energy gets brighter or dimmer.", "Hold the same boundaries you'd hold with anyone. Twin flame or not, you're not going to wait indefinitely."] },
     sm: { name: 'A High-Level <em>Soulmate</em>', plain: 'A High-Level Soulmate',
       lead: 'What you described is grounded, loving and mutual. That is a beautiful foundation.',
       body: ['This connection may not come with fireworks and constant signs, and that is okay. Real love often feels more like coming home than being set on fire.',
-             'You can let go of needing a label. Ask yourself the three questions: are you growing together, can you communicate, and does it ground in real life? If the answer is yes, that is what matters.'] },
+             'You can let go of needing a label. Ask yourself the three questions: are you growing together, can you communicate, and does it ground in real life? If the answer is yes, that is what matters.'],
+      quote: "giving yourself permission to connect with a soulmate is also very healthy.", next: ["Some of the most beautiful relationships are smooth-sailing soulmates who are there to support and nurture you.", "Ask yourself: does this feel expansive and exciting, or restrictive?", "Let go of ranking your connections. A soulmate is not a lesser love."] },
     smk: { name: 'A Soulmate <em>with Karmic Patterns</em>', plain: 'A Soulmate with Karmic Patterns',
       lead: 'There is real love and connection here, and old wounds are getting activated along the way.',
       body: ['The love is real, and so is the pattern. Often, the connection is showing you exactly where you learned to feel unsafe in love, so it can finally heal.',
-             'When you understand the pattern running underneath, you can stop repeating it, whether that means this connection deepens, or you choose differently.'] },
+             'When you understand the pattern running underneath, you can stop repeating it, whether that means this connection deepens, or you choose differently.'],
+      quote: "a karmic cycle is an energetic loop of a pattern that maybe isn't the healthiest.", next: ["Name the loop out loud. Seeing the pattern clearly is how you stop repeating it.", "Watch his actions over time: is he stepping up, or moving toward a more karmic timeline?", "Be careful not to take responsibility for his wound. You're 50% of this connection, not 100%."] },
     catalyst: { name: 'A <em>Catalyst</em> Connection', plain: 'A Catalyst Connection',
       lead: 'This connection has awakened you in profound ways. And right now, it is not moving into union in the physical world.',
       body: ['Catalysts are real, and they matter. Many women I read for were once completely sure a catalyst was their twin flame, and I was one of them. The intensity, the signs, the feeling that it has to mean something: all of it can be true, and it still may not be your long-term path.',
-             'Here is what I have seen, again and again: aligned love can be waiting in your energy field. But while your heart is focused on someone who is not choosing to grow with you, it is so hard to receive it. If you are afraid of wasting your time, the kindest thing you can do is get a real answer about where this is heading.'] },
+             'Here is what I have seen, again and again: aligned love can be waiting in your energy field. But while your heart is focused on someone who is not choosing to grow with you, it is so hard to receive it. If you are afraid of wasting your time, the kindest thing you can do is get a real answer about where this is heading.'],
+      quote: "I met several catalysts before meeting my husband, and they would always have some element of what I was manifesting, but not necessarily the whole picture.", next: ["Notice which piece of what you want this connection showed you, then keep calling in the whole picture.", "Open yourself up to your entire soul family, not just this one person.", "Don't be afraid to really hold out for the soul connection who is going to be deeply healing."] },
     karmic: { name: 'A <em>Karmic</em> Connection', plain: 'A Karmic Connection',
       lead: 'What you described has the intensity and the old wounds that karmic connections tend to bring.',
       body: ['Karmic connections are here for learning and growth. They very often echo a childhood dynamic directly, which is why they can feel so familiar, and so impossible to walk away from.',
-             'This is not a punishment, and it does not mean something is wrong with you. It is an invitation to heal the pattern at its root, so you stop attracting it. That is exactly the work I do with women one-on-one.'] }
+             'This is not a punishment, and it does not mean something is wrong with you. It is an invitation to heal the pattern at its root, so you stop attracting it. That is exactly the work I do with women one-on-one.'],
+      quote: "if there's any red flags, it's an immediate no, unless he can step up, take accountability, change and show you that he's changed.", next: ["Ask yourself: does this person even deserve to walk through my door?", "Don't try to save him. When you enable someone, you do them a disservice.", "Cut the cords gently, with Violet Flame or whatever practice you trust, and treat your feelings as valid."] }
   };
 
   var REV = '<figure><p>The clarity she brought me completely settled things for me. Everything resonated, made total sense, and confirmed my intuition. I didn\'t give her any details other than our first names, and she nailed it.</p><cite>Etsy review</cite></figure>'
@@ -301,10 +310,10 @@
 
 
   var TYPES = [
-    ['🔥 Twin Flame', 'A powerful, profound soul connection that mirrors your growth and grows with you. In a healed state it feels loving and peaceful, and it grounds in the physical world.'],
-    ['💞 Soulmate', 'A member of your soul family you share deep love and recognition with. Not every soulmate is romantic, and some carry karmic patterns to heal.'],
-    ['🌀 Karmic', 'Here for learning and growth. Usually intense, and often echoing a childhood wound so it can finally be seen and healed.'],
-    ['⚡ Catalyst', 'Someone who awakens you. Coming into union is hard, and the lesson is often self-worth.']
+    ["\ud83d\udd25 Twin Flame", "A powerful soul connection that mirrors your growth and grows with you. In union it feels stable and loving, and there's always at least an effort to meet you."],
+    ["\ud83d\udc9e Soulmate", "A member of your soul family you share deep love and recognition with. Often smooth, supportive and nurturing, and not a lesser love than a twin flame."],
+    ["\ud83c\udf00 Karmic", "An energetic loop of a pattern that isn't the healthiest. Usually intense, and often echoing a childhood wound so it can finally be seen and healed."],
+    ["\u26a1 Catalyst", "Someone who awakens you. They bring a piece of what you're calling in, never the whole picture, and the lesson is often self-worth."]
   ];
 
   var stage = document.getElementById('stage'), top = document.getElementById('top'),
@@ -367,6 +376,8 @@
     var nm = el('div', 'rname', r.name); nm.tabIndex = -1; s.appendChild(nm);
     s.appendChild(el('p', 'rlead', r.lead));
     r.body.forEach(function (p) { s.appendChild(el('p', '', p)); });
+    if (r.quote) s.appendChild(el('p', 'lq', '<q>' + r.quote.charAt(0).toUpperCase() + r.quote.slice(1) + '</q><small>From one of my Skool coaching calls</small>'));
+    if (r.next) { s.appendChild(el('div', 'h4', 'What I tell women in this place')); var ul = el('ul', 'nx'); r.next.forEach(function (t) { var li = el('li'); li.textContent = t; ul.appendChild(li); }); s.appendChild(ul); }
     s.appendChild(el('p', '', '<b>Remember:</b> labels are labels. This result is a starting point for your own discernment, not a final verdict.'));
 
     s.appendChild(el('div', 'h4', 'Instead of "are they my twin flame?", ask this'));
