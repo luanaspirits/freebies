@@ -896,7 +896,11 @@ var VOICE = {
     }
 
     if (st === 4) {
-      h += '<div class="head c"><div class="eyebrow">Step 5 · Your healing kit is unlocked 💜</div><h2>Let’s shift it, <em>right now.</em></h2>' +
+      h += '<div class="card glow" style="text-align:center;align-items:center"><span class="label">Your result is on its way to me 💜</span>' +
+        '<p>Thank you, ' + esc(state.name || 'beautiful soul') + '. I’ll read it personally and reply by email. Your healing kit is open below.</p>' +
+        '<p class="muted" style="font-size:15.5px">Want me to read what’s underneath ' + esc(P.name.replace('The ', 'your ')) + ' block in your own connection? My First Light Reading is where most women start, CA$55.</p>' +
+        '<a class="btn sm ghost" href="' + LINKS.firstLight + '" target="_blank" rel="noopener">Book my First Light Reading</a></div>' +
+        '<div class="head c" style="margin-top:10px"><div class="eyebrow">Step 5 · Your healing kit is unlocked 💜</div><h2>Let’s shift it, <em>right now.</em></h2>' +
         '<p class="muted" style="max-width:52ch">This is the exact structure I use with clients: meet the protector, tap through the belief, and give your body a new experience of safety. About 10 minutes. New to tapping? <a href="' + LINKS.eftVideo + '" target="_blank" rel="noopener">Watch my EFT basics</a>.</p></div>' +
         '<div class="step"><div class="step-h"><span class="num">1</span><h3>Locate ' + esc(P.feel) + '</h3></div><p class="muted">Where do you feel it? ' + esc(P.where) + ' Rate how strong it is right now.</p>' +
           '<div class="scale" id="pre">' + scaleBtns() + '</div><div class="scale-l"><span>1 · calm</span><span>10 · intense</span></div></div>' +
@@ -1059,7 +1063,7 @@ var VOICE = {
       var payload = {
         _subject: 'Union Block Quiz | ' + tag + ' | ' + P.name + ' | ' + name,
         _replyto: email, _template: 'box', _captcha: 'false',
-        _autoresponse: 'Hi ' + name + '! Thank you so much for taking my What’s Blocking My Union quiz and sending me your result. 💜\n\nYour primary block: ' + P.name + '\n“' + P.core + '”\nYour secondary pattern: ' + S.name + '\n\nYour affirmation: ' + P.affirmation + '\n\nYour healing kit is unlocked on the quiz page, on the device you used. I’ll personally read your message and reply soon.\n\nWith so much love,\nLuana 💜',
+        _autoresponse: 'Hi ' + name + '! Thank you so much for taking my What’s Blocking My Union quiz and sending me your result. 💜\n\nYour primary block: ' + P.name + '\n“' + P.core + '”\nYour secondary pattern: ' + S.name + '\n\nYour affirmation: ' + P.affirmation + '\n\nYour healing kit is unlocked here, on the device you used: ' + location.href.split('#')[0] + '\n\nI’ll personally read your message and reply soon. And if you’d like me to read what’s underneath ' + P.name.replace('The ', 'your ') + ' block in your own connection, my First Light Reading is where most women start: ' + LINKS.firstLight + '\n\nWith so much love,\nLuana 💜',
         'LEAD TEMPERATURE': tag, 'NAME': name, 'EMAIL': email, 'SOCIAL HANDLE': fS.value.trim() || '(not given)',
         'PRIMARY BLOCK': P.name + ' (' + R.sc[P.id] + '/15)', 'SECONDARY': S.name, 'PHASE': PHASES[R.phase].name,
         'WHAT CAME THROUGH': state.note || '(left blank)', 'WANTS NEXT': g.value, 'FULL MAP': map
