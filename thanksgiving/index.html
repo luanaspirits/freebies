@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Gratitude Card Pull · Luana Spirits</title>
+<meta name="description" content="A free Thanksgiving card pull from Luana Spirits. Take a breath, pull one card, and receive a channelled message for where you are today.">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="The Gratitude Card Pull · Luana Spirits">
+<meta property="og:description" content="A free Thanksgiving gift. Pull one card and receive a channelled message for where you are today.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #1a0a20; --plum: #2a1233; --plum2: #3d1f47; --plum3: #5b2f6b;
+    --violet: #8b5fa8; --lav: #c9b3d9; --gold: #c9a55f; --gold2: #e3c27f;
+    --text: #efe4f3; --soft: #bfaec8; --line: rgba(227,194,127,.22);
+    --card: rgba(255,255,255,.045); --white: #fff; --shade: rgba(26,10,32,.55);
+    --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --sans: 'Jost', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'DM Mono', ui-monospace, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); scroll-behavior: smooth; }
+  body {
+    margin: 0; font-family: var(--sans); font-weight: 300; font-size: 17px; line-height: 1.7;
+    color: var(--text); background: radial-gradient(ellipse at 20% 0%, #4a2458 0%, var(--plum) 40%, var(--bg) 100%) fixed var(--bg);
+    min-height: 100vh;
+  }
+  #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star { position: absolute; border-radius: 50%; background: var(--white); animation: tw 4s infinite ease-in-out; }
+  @keyframes tw { 0%,100% { opacity: .15 } 50% { opacity: .9 } }
+
+  b, strong { font-weight: 500; color: var(--gold2); }
+  em { font-family: var(--serif); font-style: italic; }
+  a { color: var(--gold2); }
+  a:focus-visible, .btn:focus-visible, button:focus-visible { outline: 2px solid var(--gold2); outline-offset: 3px; }
+
+  .wrap { position: relative; z-index: 1; max-width: 760px; margin: 0 auto;
+    padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+  section { padding-block: 34px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 3.5px; text-transform: uppercase; color: var(--gold2); }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 500; text-wrap: balance; margin: 0; }
+  h2 { font-size: clamp(28px, 5.4vw, 38px); line-height: 1.15; }
+  h2 em { color: var(--gold2); }
+  p { margin: 0; }
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+  .rule { height: 2px; width: 100%; background: linear-gradient(90deg, var(--gold), var(--violet) 60%, transparent); }
+  .pill { font-family: var(--mono); font-size: 12px; letter-spacing: 1px; padding: 5px 12px; border-radius: 30px; background: var(--plum3); color: var(--gold2); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--sans); font-weight: 500; font-size: 16px; letter-spacing: .6px; color: var(--white); text-decoration: none; background: linear-gradient(135deg, var(--gold), var(--violet)); border-radius: 40px; padding: 15px 30px; box-shadow: 0 8px 30px rgba(201,165,95,.25); transition: transform .2s, box-shadow .2s; border: 0; cursor: pointer; }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(201,165,95,.35); }
+  .btn.ghost { background: transparent; border: 1px solid var(--gold2); color: var(--gold2); box-shadow: none; }
+  .cta-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+
+  /* HEADER */
+  .top { position: relative; z-index: 1; text-align: center; padding-block: 52px 10px; }
+  .top .wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .top h1 { font-size: clamp(42px, 10vw, 76px); line-height: 1.02; }
+  .top h1 em { color: var(--gold2); display: block; }
+  .tagline { font-family: var(--serif); font-style: italic; color: var(--lav); font-size: clamp(18px, 3.4vw, 22px); max-width: 34ch; line-height: 1.45; }
+
+  /* LETTER */
+  .letter { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; }
+  .letter p { color: var(--text); }
+  .letter .sign { font-family: var(--serif); font-style: italic; color: var(--gold2); font-size: 19px; }
+
+  /* DECK */
+  .ritual { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .ritual .steps { color: var(--soft); max-width: 46ch; }
+  .deck { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 420px; margin-top: 6px; }
+  .back { aspect-ratio: 2 / 3; border-radius: 14px; border: 1px solid rgba(227,194,127,.55); cursor: pointer; position: relative; overflow: hidden;
+    background: radial-gradient(circle at 50% 45%, var(--plum3), var(--plum2) 55%, var(--bg)); box-shadow: 0 6px 24px rgba(0,0,0,.35);
+    transition: transform .25s, box-shadow .25s; padding: 0; color: var(--gold2); }
+  .back::before { content: ""; position: absolute; inset: 7px; border: 1px solid rgba(227,194,127,.35); border-radius: 9px; }
+  .back span { position: absolute; inset: 0; display: grid; place-items: center; font-size: 26px; }
+  .back:hover { transform: translateY(-6px) rotate(-1deg); box-shadow: 0 14px 34px rgba(201,165,95,.3); }
+  .deck.done .back { opacity: .25; pointer-events: none; }
+  .deck .back.picked { opacity: 1; transform: translateY(-8px); box-shadow: 0 0 34px rgba(227,194,127,.45); }
+
+  /* REVEAL */
+  .reveal { display: none; border-radius: 24px; border: 1px solid rgba(227,194,127,.5); background: linear-gradient(160deg, var(--plum2), rgba(91,47,107,.35)); padding: 30px 24px; box-shadow: 0 0 60px rgba(227,194,127,.12); flex-direction: column; gap: 18px; text-align: left; scroll-margin-top: 20px; }
+  .reveal.show { display: flex; animation: rise .7s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: none } }
+  .reveal .num { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; color: var(--soft); text-transform: uppercase; }
+  .reveal h3 { font-size: clamp(30px, 6.4vw, 42px); line-height: 1.1; color: var(--white); }
+  .reveal h3 em { color: var(--gold2); }
+  .reveal .msg { display: flex; flex-direction: column; gap: 12px; }
+  .box { border-radius: 14px; padding: 16px 18px; background: var(--shade); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+  .box .label { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--lav); }
+  .box.aff p { font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--gold2); line-height: 1.45; }
+  .again { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .again button { background: transparent; border: 1px solid var(--line); color: var(--soft); font-family: var(--mono); font-size: 12px; letter-spacing: 1px; padding: 9px 16px; border-radius: 30px; cursor: pointer; }
+  .again button:hover { border-color: var(--gold2); color: var(--gold2); }
+
+  /* OFFER */
+  .offer { border-radius: 20px; border: 1px solid var(--line); background: linear-gradient(135deg, rgba(201,165,95,.14), rgba(139,95,168,.2)); padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; }
+  .offer .amt { font-family: var(--serif); font-size: 40px; color: var(--white); line-height: 1; }
+  .offer .amt small { font-family: var(--mono); font-size: 12px; color: var(--soft); letter-spacing: 1px; }
+  ul.marks { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  ul.marks li { position: relative; padding-left: 28px; }
+  ul.marks li::before { content: "\2726"; position: absolute; left: 0; top: 0; color: var(--gold2); font-size: 14px; line-height: 1.9; }
+  .small { font-size: 14.5px; color: var(--soft); }
+
+  .final { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px; padding-block: 40px 10px; }
+
+  /* FOOTER */
+  footer { position: relative; z-index: 1; text-align: center; padding-block: 40px 60px; color: var(--soft); font-size: 14px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+  footer .sig { font-family: var(--serif); font-size: 26px; color: var(--gold2); }
+  footer .role { font-family: var(--mono); font-size: 11.5px; letter-spacing: 2px; text-transform: uppercase; }
+  footer .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; }
+  footer .links a { text-decoration: none; }
+  footer .email { user-select: all; color: var(--gold2); }
+  footer .legal { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; font-size: 13px; }
+  footer .legal a { color: var(--soft); }
+  footer .fine { font-size: 12.5px; max-width: 60ch; line-height: 1.6; opacity: .85; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .star { animation: none; opacity: .5 } html { scroll-behavior: auto }
+    .reveal.show { animation: none } .btn, .back { transition: none }
+  }
+</style>
+</head>
+<body>
+<div id="stars" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">A Thanksgiving gift from @luanaspirits</div>
+    <h1>The Gratitude <em>Card Pull</em></h1>
+    <p class="tagline">One card. One channelled message. For exactly where you are today.</p>
+    <span class="pill">Free · open this Thanksgiving weekend only</span>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <div class="letter">
+      <div class="eyebrow">A little note from me</div>
+      <p>Hi beautiful soul 💜</p>
+      <p>This Thanksgiving, my husband and I are celebrating togetherness. After a long separation and fighting really hard to be in the same place, we're finally home, together, and I don't take one second of it for granted.</p>
+      <p>I'm also so grateful for you. This year I've watched so many divine feminines in this community make real breakthroughs: in their inner child healing, in their businesses, and in their connections. Some of you are moving into union. Some of you are falling in love with yourselves for the first time. Every one of those wins counts.</p>
+      <p>So I made you something. I wrote these cards from the messages Spirit kept bringing through in my readings this week. Take a breath, ask what you most need to hear today, and pull one.</p>
+      <p class="sign">With so much love, Luana</p>
+    </div>
+  </section>
+
+  <div class="rule" role="presentation"></div>
+
+  <section class="ritual" id="pull">
+    <div class="eyebrow">Your card pull</div>
+    <h2>Take a breath, <em>then choose.</em></h2>
+    <p class="steps">Place a hand on your heart. Ask quietly: <em>"What do I need to know today?"</em> Then tap the card you feel drawn to.</p>
+    <div class="deck" id="deck" role="group" aria-label="Choose a card"></div>
+
+    <article class="reveal" id="reveal" aria-live="polite">
+      <div class="num" id="rNum"></div>
+      <h3 id="rTitle"></h3>
+      <div class="msg" id="rMsg"></div>
+      <div class="box">
+        <span class="label">Today's gratitude prompt</span>
+        <p id="rPrompt"></p>
+      </div>
+      <div class="box aff">
+        <span class="label">Say this out loud</span>
+        <p id="rAff"></p>
+      </div>
+      <div class="again">
+        <button type="button" id="again">Pull a card for someone you love</button>
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <div class="offer">
+      <div class="eyebrow">If you want your own messages</div>
+      <h2 style="font-size:clamp(26px,5vw,34px)">The First Light <em>Reading</em></h2>
+      <p style="color:var(--soft)">This card is a message for the collective. If you'd love to hear what your own spirit guides want you to know, my First Light Reading is a gentle place to start with me.</p>
+      <ul class="marks">
+        <li>A written, no-tools psychic reading channelled just for you</li>
+        <li>You share one thing you'd love clarity on. I prefer you don't tell me details, so Spirit can show me</li>
+        <li>Usually delivered the same day, Monday to Friday</li>
+      </ul>
+      <div class="amt">CA$55<small> subscriber rate · reg. CA$99</small></div>
+      <div class="cta-row" style="justify-content:flex-start">
+        <a class="btn" href="https://stan.store/LuanaSpirits/p/the-first-light-reading" target="_blank" rel="noopener">Book my First Light Reading</a>
+      </div>
+      <p class="small">No pressure at all. Whether a reading feels right is only your decision. The card above is yours either way.</p>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="eyebrow">Before you go</div>
+    <h2>You don't have to be <em>anywhere else</em> today.</h2>
+    <p style="color:var(--soft);max-width:48ch">Wherever you are on your journey, this moment is allowed to be enough. Happy Thanksgiving, beautiful soul.</p>
+    <div class="cta-row">
+      <a class="btn ghost" href="#pull" id="backTop">Pull another card</a>
+      <a class="btn" href="https://stan.store/LuanaSpirits/p/the-first-light-reading" target="_blank" rel="noopener">Book a First Light Reading</a>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="sig">With love, Luana Spirits 💜</div>
+  <div class="role">Psychic Medium · Akashic Records Reader · Love Coach</div>
+  <div class="links">
+    <a href="https://luanaspirits.com">luanaspirits.com</a>
+    <a href="https://readings.luanaspirits.com/">Readings</a>
+    <a href="https://readings.luanaspirits.com/membership/">Membership</a>
+    <a href="https://www.tiktok.com/@luanaspirits" target="_blank" rel="noopener">TikTok</a>
+    <a href="https://www.instagram.com/luanaspirits" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.youtube.com/@luanaspirits/" target="_blank" rel="noopener">YouTube</a>
+  </div>
+  <div>Questions? <span class="email">luana@luanaspirits.com</span></div>
+  <nav class="legal" aria-label="Legal">
+    <a href="https://luanaspirits.com/privacy/">Privacy Policy</a>
+    <a href="https://luanaspirits.com/terms/">Terms of Service</a>
+  </nav>
+  <p class="fine">Readings and card messages are for spiritual guidance, personal growth and entertainment purposes only, and are not a substitute for therapy or medical, psychological, legal or financial advice. No outcome is guaranteed.</p>
+  <p class="fine">&copy; 2026 Luana Spirits Consulting. All rights reserved.</p>
+</footer>
+
+<script>
+(function () {
+  var s = document.getElementById('stars');
+  for (var i = 0; i < 70; i++) {
+    var d = document.createElement('div'); d.className = 'star';
+    var z = Math.random() * 2 + 1;
+    d.style.cssText = 'width:' + z + 'px;height:' + z + 'px;left:' + Math.random() * 100 + '%;top:' + Math.random() * 100 + '%;animation-delay:' + Math.random() * 4 + 's';
+    if (Math.random() < .2) d.style.background = '#e3c27f';
+    s.appendChild(d);
+  }
+
+  var CARDS = [
+    { t: 'Sun on <em>Your Face</em>',
+      m: ['Spirit wants you to know you are already thriving. Picture yourself with your eyes closed, smiling, basking in warm light. That is your energy right now, even if your mind tells you otherwise.',
+          'You don\'t need to earn rest or wait for the next milestone to feel good. The growth already happened. Today is for enjoying it.'],
+      p: 'What is one thing in your life right now that your younger self prayed for?',
+      a: 'I am allowed to feel good right now, exactly as I am.' },
+    { t: 'You Already <em>Know</em>',
+      m: ['If you\'ve been looping through every possible scenario, this card is your guides gently saying: stop searching outside yourself. The answer you keep coming back to is the one.',
+          'Your intuition has been speaking to you clearly. The work now isn\'t finding more information. It\'s trusting what you already feel.'],
+      p: 'When did your intuition guide you well this year? Thank that part of you.',
+      a: 'I trust myself. My inner knowing is safe to follow.' },
+    { t: 'Ground <em>It</em>',
+      m: ['You have done so much of the energetic work. The meditations, the healing, the deep inner journeys. Spirit says you\'ve mastered the energy level, and now it\'s time to bring it into your everyday life.',
+          'Union, abundance and peace are built in the tangible moments too: how you speak, how you rest, what you say yes to. Choose one small real-world action today.'],
+      p: 'What is one ordinary, everyday moment from this year you\'re grateful for?',
+      a: 'My spiritual growth lives in my everyday choices.' },
+    { t: 'Speak <em>Your Heart</em>',
+      m: ['Your throat chakra is calling for some love. There is something you\'ve been feeling that wants to be said out loud, whether to a person in your life or simply to yourself.',
+          'Every time you express what you feel and what you want, you strengthen the communication energy in all your connections. Practise with someone safe today. It counts.'],
+      p: 'Who are you grateful for that you haven\'t told yet? Tell them today.',
+      a: 'My voice matters. It is safe for me to say what I feel and what I want.' },
+    { t: 'You Are <em>Lovable</em>',
+      m: ['Whatever happened, whatever someone did or didn\'t do, it was never proof that you are hard to love. People act from their own wounds, and you don\'t have to decode every one of them.',
+          'Your guides are surrounding you with the softest, most gentle energy right now. Let yourself be held by it. You are so deeply loved in Spirit.'],
+      p: 'What is one quality in yourself you\'re grateful to have this year?',
+      a: 'I am lovable, worthy and whole. It was never my fault.' },
+    { t: 'The Desire <em>Was the Gift</em>',
+      m: ['That connection that challenged you didn\'t happen to break you. It woke you up. It showed you, in the clearest way, what you truly want in love and in life.',
+          'When we experience the opposite of what we desire, our desire becomes stronger and clearer. That clarity is a manifestation tool. Use it.'],
+      p: 'What did a hard experience this year teach you that you\'re now thankful for?',
+      a: 'I know what I want, and I choose it for myself.' },
+    { t: 'Inner <em>Strength</em>',
+      m: ['Spirit is showing me that every awakening you\'ve moved through has made you stronger. Your resilience, your ability to make better choices, your power to manifest: it has all grown.',
+          'You are not the same woman who started this journey. Take a moment to honour how far you\'ve come.'],
+      p: 'What is one thing you can do now that you couldn\'t do a year ago?',
+      a: 'I am stronger than I know, and I keep rising.' },
+    { t: 'Right <em>Where You Are</em>',
+      m: ['You are not behind. There is no version of you somewhere else who is doing it better. This moment, this chapter, is exactly where your soul is meant to be learning and receiving.',
+          'Growth isn\'t about fixing yourself so you finally deserve good things. You already deserve them. It\'s about meeting your life with fresh eyes every day.'],
+      p: 'What about where you are right now would you miss if it changed tomorrow?',
+      a: 'I am exactly where I need to be. This moment is enough.' },
+    { t: 'Open <em>to Receive</em>',
+      m: ['You are so good at pouring into others. Your guides are asking you to let yourself be poured into for once. Receive the compliment. Accept the help. Let love reach you.',
+          'Your sacral energy is softening and opening. Any old fears around closeness and intimacy are ready to clear. Being cared for is safe.'],
+      p: 'Who poured into you this year? How did it feel to receive it?',
+      a: 'I am open to receiving love, support and abundance with ease.' },
+    { t: '<em>Togetherness</em>',
+      m: ['Look around at the people who stood beside you this year. Every person in your life is a mirror, and the loving ones are reflecting your own heart back to you.',
+          'Today, let yourself feel connected. To your loved ones, to your guides, to your community, and to every part of you that has been waiting to come home.'],
+      p: 'Who reflected your light back to you this year?',
+      a: 'I am connected, supported and never truly alone.' },
+    { t: 'Nothing <em>Was Wasted</em>',
+      m: ['Every season you fought for something, every time you kept your heart open when it would have been easier to close it, it mattered. None of it was wasted.',
+          'Spirit wants you to know the love and devotion you\'ve given, to yourself and to your vision, is building something real. Keep holding your standard.'],
+      p: 'What are you proud of yourself for holding onto this year?',
+      a: 'My devotion to myself and my vision is never wasted.' },
+    { t: 'Your <em>Harvest</em>',
+      m: ['It\'s time to celebrate what you\'ve grown. The boundaries you held, the habits you changed, the healing you did when nobody was watching. This is your harvest season.',
+          'Don\'t rush past your wins to get to the next goal. Name them. Feel them. Let yourself be proud.'],
+      p: 'Write down three wins from this year, big or small.',
+      a: 'I celebrate myself and everything I\'ve grown.' }
+  ];
+
+  var deck = document.getElementById('deck'), reveal = document.getElementById('reveal');
+  var order = [];
+
+  function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+
+  function build() {
+    deck.innerHTML = ''; deck.classList.remove('done');
+    order = shuffle(CARDS.map(function (_, i) { return i; })).slice(0, 6);
+    order.forEach(function (ci, pos) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'back';
+      b.setAttribute('aria-label', 'Card ' + (pos + 1));
+      b.innerHTML = '<span aria-hidden="true">✦</span>';
+      b.addEventListener('click', function () { pick(b, ci); });
+      deck.appendChild(b);
+    });
+  }
+
+  function pick(btn, ci) {
+    if (deck.classList.contains('done')) return;
+    deck.classList.add('done'); btn.classList.add('picked');
+    var c = CARDS[ci];
+    document.getElementById('rNum').textContent = 'Your card · ' + (ci + 1) + ' of 12';
+    document.getElementById('rTitle').innerHTML = c.t;
+    document.getElementById('rMsg').innerHTML = c.m.map(function (p) { return '<p>' + p + '</p>'; }).join('');
+    document.getElementById('rPrompt').textContent = c.p;
+    document.getElementById('rAff').textContent = '"' + c.a + '"';
+    reveal.classList.add('show');
+    setTimeout(function () { reveal.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 250);
+  }
+
+  function reset() {
+    reveal.classList.remove('show'); build();
+    document.getElementById('pull').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  document.getElementById('again').addEventListener('click', reset);
+  document.getElementById('backTop').addEventListener('click', function (e) { e.preventDefault(); reset(); });
+  build();
+})();
+</script>
+</body>
+</html>
